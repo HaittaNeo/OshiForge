@@ -1,0 +1,348 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OshiForge</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">OF</div>
+      <div>
+        <div class="title">OshiForge</div>
+        <div class="subtitle">MyOshi CSS builder - forge your profile theme</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="btnReset" class="btn">Reset</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="panel">
+      <div class="tabs" role="tablist" aria-label="Editor Tabs">
+        <button class="tabBtn active" data-tab="presets">Presets</button>
+        <button class="tabBtn" data-tab="colors">Colors</button>
+        <button class="tabBtn" data-tab="layout">Layout</button>
+        <button class="tabBtn" data-tab="type">Type</button>
+        <button class="tabBtn" data-tab="glass">Glass</button>
+        <button class="tabBtn" data-tab="avatar">Avatar</button>
+        <button class="tabBtn" data-tab="sections">Sections</button>
+        <button class="tabBtn" data-tab="advanced">Advanced</button>
+      </div>
+
+      <div class="tabPanel active" data-tab-panel="presets">
+        <h2>Starter Templates</h2>
+        <div class="row two">
+          <div>
+            <label>Template preset</label>
+            <select id="presetSelect"></select>
+          </div>
+          <div class="toolRow">
+            <button id="btnRandomPalette" class="btn">Random Palette</button>
+            <button id="btnCopy" class="btn btnPrimary">Copy CSS</button>
+          </div>
+        </div>
+        <div class="row two">
+          <button id="btnSaveDraft" class="btn">Save Draft</button>
+          <button id="btnLoadDraft" class="btn">Load Draft</button>
+        </div>
+        <div class="row two">
+          <button id="btnExportTheme" class="btn">Export Theme</button>
+          <button id="btnImportTheme" class="btn">Import Theme</button>
+        </div>
+        <input id="themeFile" type="file" accept="application/json" hidden />
+      </div>
+
+      <div class="tabPanel" data-tab-panel="colors">
+        <h2>Palette</h2>
+        <div class="row three">
+          <div><label>Primary</label><input id="cPrimary" type="color" /></div>
+          <div><label>Secondary</label><input id="cSecondary" type="color" /></div>
+          <div><label>Accent</label><input id="cAccent" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div><label>Text</label><input id="cText" type="color" /></div>
+          <div>
+            <label>Link color</label>
+            <input id="linkColor" type="color" />
+          </div>
+        </div>
+        <div class="row two">
+          <div><label>Link hover</label><input id="linkHoverColor" type="color" /></div>
+          <div>
+            <label>Link weight</label>
+            <input id="linkWeight" type="range" min="400" max="900" step="100" />
+            <div class="hint" id="linkWeightLabel"></div>
+          </div>
+        </div>
+        <div class="row">
+          <label><input id="linkUnderline" type="checkbox" /> Underline links</label>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="layout">
+        <h2>Layout & Cards</h2>
+        <div class="row two">
+          <div>
+            <label>Container width</label>
+            <input id="containerWidth" type="range" min="760" max="1400" step="10" />
+            <div class="hint" id="containerWidthLabel"></div>
+          </div>
+          <div>
+            <label>Panel gap</label>
+            <input id="panelGap" type="range" min="8" max="40" step="1" />
+            <div class="hint" id="panelGapLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Card padding</label>
+            <input id="cardPadding" type="range" min="6" max="30" step="1" />
+            <div class="hint" id="cardPaddingLabel"></div>
+          </div>
+          <div>
+            <label>Section spacing</label>
+            <input id="sectionSpacing" type="range" min="6" max="30" step="1" />
+            <div class="hint" id="sectionSpacingLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Card radius</label>
+            <input id="cardRadius" type="range" min="0" max="28" step="1" />
+            <div class="hint" id="cardRadiusLabel"></div>
+          </div>
+          <div>
+            <label>Card border width</label>
+            <input id="cardBorderWidth" type="range" min="0" max="4" step="1" />
+            <div class="hint" id="cardBorderWidthLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Hover lift</label>
+            <input id="hoverLift" type="range" min="0" max="10" step="1" />
+            <div class="hint" id="hoverLiftLabel"></div>
+          </div>
+          <div>
+            <label>Hover scale</label>
+            <input id="hoverScale" type="range" min="0.95" max="1.08" step="0.01" />
+            <div class="hint" id="hoverScaleLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Shadow strength</label>
+            <input id="shadowStrength" type="range" min="0" max="1.5" step="0.01" />
+            <div class="hint" id="shadowStrengthLabel"></div>
+          </div>
+          <div>
+            <label>Glow strength</label>
+            <input id="glowStrength" type="range" min="0" max="1" step="0.01" />
+            <div class="hint" id="glowStrengthLabel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="type">
+        <h2>Typography & Headers</h2>
+        <div class="row two">
+          <div>
+            <label>Body font</label>
+            <select id="fontBody">
+              <option value="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace">Monospace</option>
+              <option value="'Quicksand', system-ui, sans-serif">Quicksand</option>
+              <option value="'Segoe UI', system-ui, sans-serif">Segoe UI</option>
+              <option value="'Playfair Display', Georgia, serif">Playfair</option>
+            </select>
+          </div>
+          <div>
+            <label>Header font</label>
+            <select id="fontHeader">
+              <option value="inherit">Inherit</option>
+              <option value="'Segoe UI', system-ui, sans-serif">Segoe UI</option>
+              <option value="'Playfair Display', Georgia, serif">Playfair</option>
+              <option value="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace">Monospace</option>
+            </select>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Base font size</label>
+            <input id="baseFontSize" type="range" min="12" max="20" step="1" />
+            <div class="hint" id="baseFontSizeLabel"></div>
+          </div>
+          <div>
+            <label>Line height</label>
+            <input id="lineHeight" type="range" min="1.2" max="2" step="0.05" />
+            <div class="hint" id="lineHeightLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Header size</label>
+            <input id="headerFontSize" type="range" min="12" max="28" step="1" />
+            <div class="hint" id="headerFontSizeLabel"></div>
+          </div>
+          <div>
+            <label>Header link size</label>
+            <input id="headerLinkSize" type="range" min="9" max="16" step="1" />
+            <div class="hint" id="headerLinkSizeLabel"></div>
+          </div>
+        </div>
+        <div class="row three">
+          <div><label>Header grad 1</label><input id="headerGradStart" type="color" /></div>
+          <div><label>Header grad 2</label><input id="headerGradMid" type="color" /></div>
+          <div><label>Header grad 3</label><input id="headerGradEnd" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div><label>Star icon</label><input id="starIcon" type="text" placeholder="e.g. ⭐" /></div>
+          <div><label>Heart icon</label><input id="heartIcon" type="text" placeholder="e.g. 💚" /></div>
+        </div>
+        <div class="row">
+          <label><input id="headerUppercase" type="checkbox" /> Uppercase headers</label>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="glass">
+        <h2>Glass</h2>
+        <div class="row two">
+          <div>
+            <label>Panel alpha</label>
+            <input id="panelAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="panelAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Border alpha</label>
+            <input id="borderAlpha" type="range" min="0.05" max="0.9" step="0.01" />
+            <div class="hint" id="borderAlphaLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Top bar alpha</label>
+            <input id="topbarAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="topbarAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Section alpha</label>
+            <input id="sectionAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="sectionAlphaLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Social alpha</label>
+            <input id="socialAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="socialAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Glass blur</label>
+            <input id="glassBlur" type="range" min="0" max="24" step="1" />
+            <div class="hint" id="glassBlurLabel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="avatar">
+        <h2>Avatar</h2>
+        <div class="row two">
+          <div>
+            <label>Avatar size</label>
+            <input id="avatarSize" type="range" min="80" max="280" step="2" />
+            <div class="hint" id="avatarSizeLabel"></div>
+          </div>
+          <div>
+            <label>Avatar shape</label>
+            <select id="avatarShape"></select>
+          </div>
+        </div>
+        <div class="row">
+          <label>Avatar border thickness</label>
+          <input id="avatarBorder" type="range" min="0" max="6" step="1" />
+          <div class="hint" id="avatarBorderLabel"></div>
+        </div>
+        <div class="row">
+          <label>Custom avatar shape CSS</label>
+          <textarea id="customShapeCss" rows="6" placeholder="clip-path: polygon(...);"></textarea>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="sections">
+        <h2>Sections & Buttons</h2>
+        <div class="row">
+          <label><input id="uniformLinks" type="checkbox" /> Keep contact/boop styles uniform</label>
+        </div>
+        <div class="row three">
+          <div><label>Button bg</label><input id="btnBg" type="color" /></div>
+          <div><label>Button text</label><input id="btnText" type="color" /></div>
+          <div><label>Button border</label><input id="btnBorder" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div><label>Hover bg</label><input id="btnHoverBg" type="color" /></div>
+          <div><label>Hover text</label><input id="btnHoverText" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Button alpha</label>
+            <input id="buttonAlpha" type="range" min="0.1" max="0.95" step="0.01" />
+            <div class="hint" id="buttonAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Button hover alpha</label>
+            <input id="buttonHoverAlpha" type="range" min="0.1" max="0.98" step="0.01" />
+            <div class="hint" id="buttonHoverAlphaLabel"></div>
+          </div>
+        </div>
+        <div class="row three">
+          <label><input id="showTopbar" type="checkbox" /> Show top bar</label>
+          <label><input id="showTop8" type="checkbox" /> Show Top 8</label>
+          <label><input id="showSectionLinks" type="checkbox" /> Show section links</label>
+        </div>
+        <div class="row three">
+          <label><input id="showSocialLinks" type="checkbox" /> Show links card</label>
+          <label><input id="showDetails" type="checkbox" /> Show details card</label>
+          <label><input id="showSong" type="checkbox" /> Show song card</label>
+        </div>
+      </div>
+
+      <div class="tabPanel" data-tab-panel="advanced">
+        <h2>Advanced</h2>
+        <div class="row">
+          <label>Custom cursor CSS</label>
+          <textarea id="customCursorCss" rows="6" placeholder="* { cursor: url('...') 16 16, auto !important; }"></textarea>
+        </div>
+        <div class="row">
+          <label>Extra custom CSS (appended last)</label>
+          <textarea id="extraCss" rows="8" placeholder=".profile-page.profile-custom-css .card { ... }"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Live Preview</h2>
+      <div class="previewShell">
+        <iframe id="preview" title="preview"></iframe>
+      </div>
+
+      <h2>Generated CSS</h2>
+      <div class="row">
+        <textarea id="cssOut" rows="18" spellcheck="false"></textarea>
+        <div class="hint">
+          Copy/paste this into your MyOshi custom CSS box. (We scope everything to <code>.profile-page.profile-custom-css</code>.)
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>OshiForge - built for MyOshi profile customization.</span>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
