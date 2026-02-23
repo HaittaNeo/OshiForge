@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OshiForge — MyOshi CSS Builder</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">⛧</div>
+      <div class="brandText">
+        <div class="brandName">OshiForge</div>
+        <div class="brandTag">Forge your MyOshi CSS. Copy. Paste. Drip.</div>
+      </div>
+    </div>
+
+    <div class="topActions">
+      <button class="btn" id="btnCopyCss">Copy CSS</button>
+      <button class="btn" id="btnDownloadJson">Export JSON</button>
+      <label class="btn fileBtn">
+        Import JSON
+        <input id="fileImportJson" type="file" accept="application/json" />
+      </label>
+      <button class="btn primary" id="btnShare">Share Link</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls">
+      <div class="panelHeader">
+        <h2>Controls</h2>
+        <div class="row wrap gap">
+          <label class="select">
+            <span>Preset</span>
+            <select id="presetSelect"></select>
+          </label>
+
+          <label class="check">
+            <input type="checkbox" id="lockScheme" />
+            <span>Lock color scheme (sync accents)</span>
+          </label>
+
+          <label class="check">
+            <input type="checkbox" id="enablePreviewBg" checked />
+            <span>Show preview background image</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="theme">Theme</button>
+        <button class="tab" data-tab="layout">Layout</button>
+        <button class="tab" data-tab="sections">Sections</button>
+        <button class="tab" data-tab="advanced">Advanced</button>
+      </div>
+
+      <!-- THEME TAB -->
+      <div class="tabPanel active" id="tab-theme">
+        <div class="grid2">
+          <div class="card">
+            <h3>Core colors</h3>
+            <div class="grid2">
+              <label class="field">
+                <span>Text</span>
+                <input type="color" id="cText" />
+              </label>
+              <label class="field">
+                <span>Text dim</span>
+                <input type="color" id="cTextDim" />
+              </label>
+              <label class="field">
+                <span>Panel</span>
+                <input type="color" id="cPanel" />
+              </label>
+              <label class="field">
+                <span>Panel 2</span>
+                <input type="color" id="cPanel2" />
+              </label>
+              <label class="field">
+                <span>Border</span>
+                <input type="color" id="cBorder" />
+              </label>
+              <label class="field">
+                <span>Border soft</span>
+                <input type="color" id="cBorderSoft" />
+              </label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Accents</h3>
+            <div class="grid2">
+              <label class="field">
+                <span>Cyan</span>
+                <input type="color" id="aCyan" />
+              </label>
+              <label class="field">
+                <span>Blue</span>
+                <input type="color" id="aBlue" />
+              </label>
+              <label class="field">
+                <span>Purple</span>
+                <input type="color" id="aPurple" />
+              </label>
+              <label class="field">
+                <span>Amber</span>
+                <input type="color" id="aAmber" />
+              </label>
+              <label class="field">
+                <span>Green</span>
+                <input type="color" id="aGreen" />
+              </label>
+              <label class="field">
+                <span>Pink</span>
+                <input type="color" id="aPink" />
+              </label>
+            </div>
+
+            <div class="hint">
+              Tip: with <b>Lock color scheme</b> enabled, changing Cyan will also adjust Blue/Purple/Pink/Green toward it.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <h3>Effects</h3>
+            <label class="field">
+              <span>Blur strength</span>
+              <input type="range" id="blur" min="0" max="28" step="1" />
+              <span class="mono" id="blurVal"></span>
+            </label>
+            <label class="field">
+              <span>Shadow strength</span>
+              <input type="range" id="shadow" min="0" max="100" step="1" />
+              <span class="mono" id="shadowVal"></span>
+            </label>
+            <label class="field">
+              <span>Glow strength</span>
+              <input type="range" id="glow" min="0" max="100" step="1" />
+              <span class="mono" id="glowVal"></span>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3>Typography</h3>
+            <label class="field">
+              <span>Font family</span>
+              <select id="fontFamily">
+                <option value="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace">Monospace (Cyber)</option>
+                <option value="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">System UI</option>
+                <option value="&quot;Trebuchet MS&quot;, system-ui, sans-serif">Trebuchet</option>
+                <option value="Georgia, serif">Georgia (Bookish)</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Display name size</span>
+              <input type="range" id="nameSize" min="16" max="42" step="1" />
+              <span class="mono" id="nameSizeVal"></span>
+            </label>
+
+            <label class="field">
+              <span>Section header caps</span>
+              <select id="headerCaps">
+                <option value="uppercase">Uppercase</option>
+                <option value="none">None</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYOUT TAB -->
+      <div class="tabPanel" id="tab-layout">
+        <div class="grid2">
+          <div class="card">
+            <h3>Cards</h3>
+            <label class="field">
+              <span>Card radius</span>
+              <input type="range" id="cardRadius" min="6" max="30" step="1" />
+              <span class="mono" id="cardRadiusVal"></span>
+            </label>
+            <label class="field">
+              <span>Card padding</span>
+              <input type="range" id="cardPadding" min="8" max="26" step="1" />
+              <span class="mono" id="cardPaddingVal"></span>
+            </label>
+
+            <label class="field">
+              <span>Hover lift</span>
+              <input type="range" id="hoverLift" min="0" max="10" step="1" />
+              <span class="mono" id="hoverLiftVal"></span>
+            </label>
+          </div>
+
+          <div class="card">
+            <h3>Avatar</h3>
+            <label class="field">
+              <span>Avatar size</span>
+              <input type="range" id="avatarSize" min="88" max="280" step="1" />
+              <span class="mono" id="avatarSizeVal"></span>
+            </label>
+
+            <label class="field">
+              <span>Avatar shape</span>
+              <select id="avatarShape">
+                <option value="hex">Hex</option>
+                <option value="circle">Circle</option>
+                <option value="square">Square</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Avatar border width</span>
+              <input type="range" id="avatarBorder" min="0" max="6" step="1" />
+              <span class="mono" id="avatarBorderVal"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Background</h3>
+          <label class="field">
+            <span>Background image URL</span>
+            <input type="text" id="bgUrl" placeholder="https://..." />
+          </label>
+          <div class="grid2">
+            <label class="field">
+              <span>Position</span>
+              <select id="bgPos">
+                <option value="center top">center top</option>
+                <option value="center center">center center</option>
+                <option value="center bottom">center bottom</option>
+                <option value="left top">left top</option>
+                <option value="right top">right top</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Attachment</span>
+              <select id="bgAttach">
+                <option value="fixed">fixed</option>
+                <option value="scroll">scroll</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTIONS TAB -->
+      <div class="tabPanel" id="tab-sections">
+        <div class="hint">
+          Every section here maps to typical MyOshi page chunks. Users can toggle + customize, and also add custom CSS per section.
+        </div>
+
+        <div class="accordion" id="sectionsAccordion"></div>
+      </div>
+
+      <!-- ADVANCED TAB -->
+      <div class="tabPanel" id="tab-advanced">
+        <div class="card">
+          <h3>Extra CSS (global)</h3>
+          <div class="hint">Anything typed here is appended to the generated CSS. Great for ultra-specific fixes (like stubborn buttons).</div>
+          <textarea id="extraCss" class="code" spellcheck="false" placeholder="/* your overrides here */"></textarea>
+        </div>
+
+        <div class="card">
+          <h3>Selector Helper</h3>
+          <div class="hint">
+            Quick targets that usually exist on MyOshi profiles (and in the preview). If something doesn’t respond, it’s usually because the element is a <code>button</code> not an <code>a</code>, or it’s using inline styles.
+          </div>
+          <pre class="codeBlock" id="selectorHelper"></pre>
+        </div>
+      </div>
+
+      <div class="card output">
+        <div class="outputHeader">
+          <h3>Generated CSS (copy/paste into MyOshi)</h3>
+          <div class="row gap">
+            <button class="btn" id="btnCopyCss2">Copy</button>
+            <button class="btn" id="btnReset">Reset</button>
+          </div>
+        </div>
+        <textarea id="cssOutput" class="code" readonly spellcheck="false"></textarea>
+      </div>
+    </section>
+
+    <section class="panel preview">
+      <div class="panelHeader">
+        <h2>Live Preview</h2>
+        <div class="hint">This is a MyOshi-like mock. The generated CSS is applied in real time.</div>
+      </div>
+
+      <div class="previewShell">
+        <iframe id="previewFrame" title="Preview"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="mono">OshiForge</span> • GitHub Pages ready • Built for MyOshi CSS customization
+  </footer>
+
+  <script src="./presets.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
