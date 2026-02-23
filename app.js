@@ -111,6 +111,7 @@ const DEFAULTS = {
   extraCss: "",
   commentPadding: 10,
   replyBorderColor: "#49f6ff",
+  commentBordersTransparent: false,
 };
 
 const BINDINGS = [
@@ -211,6 +212,7 @@ const BINDINGS = [
   ["extraCss", "value", "extraCss"],
   ["commentPadding", "value", "commentPadding"],
   ["replyBorderColor", "value", "replyBorderColor"],
+  ["commentBordersTransparent", "checked", "commentBordersTransparent"],
 ];
 
 const PRESETS = [
@@ -917,6 +919,9 @@ function buildCss(){
   const commentsAlpha = clamp(state.commentsAlpha, 0.1, 1);
   const commentPadding = clamp(state.commentPadding, 0, 26);
   const replyBorderColor = state.replyBorderColor;
+  const commentBordersTransparent = Boolean(state.commentBordersTransparent);
+  const commentBorderFinal = commentBordersTransparent ? "transparent" : rgba(commentsBorderColor, 0.45);
+  const replyBorderFinal = commentBordersTransparent ? "transparent" : rgba(replyBorderColor, 0.45);
   const presetCssRaw = String(activePresetCss || "").trim();
   const presetImports = presetCssRaw.match(/^\s*@import[^;]+;\s*$/gm) || [];
   const presetCssBody = presetCssRaw.replace(/^\s*@import[^;]+;\s*$/gm, "").trim();
@@ -1158,11 +1163,11 @@ function buildCss(){
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
   css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
   css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
-  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
   css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
 
   // Custom cursor CSS (advanced, appended raw)
@@ -1300,11 +1305,11 @@ function buildCss(){
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
   css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
   css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
-  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
   css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
   css += `${avatarMediaSelector}{box-shadow: 0 0 ${Math.round(30 + 28 * avatarGlow)}px ${rgba(primary,0.25 + 0.35*avatarGlow)}, 0 0 ${Math.round(80 + 50 * avatarGlow)}px ${rgba(secondary,0.15 + 0.25*avatarGlow)}, 0 18px 50px rgba(0,0,0,0.85) !important;}\n`;
   css += `${avatarMediaSelector}:hover{box-shadow:0 0 ${Math.round(45 + 36 * avatarGlow)}px ${rgba(primary,0.35 + 0.45*avatarGlow)}, 0 0 ${Math.round(120 + 80 * avatarGlow)}px ${rgba(secondary,0.2 + 0.35*avatarGlow)}, 0 0 ${Math.round(200 + 120 * avatarGlow)}px ${rgba(primary,0.12 + 0.25*avatarGlow)}, 0 30px 80px rgba(0,0,0,0.95) !important;}\n`;
