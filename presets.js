@@ -1,5 +1,5 @@
 // You can add more presets anytime.
-// Each preset is just a partial "state" — it merges onto defaults.
+// Each preset is just a partial "state" - it merges onto defaults.
 window.OSHIFORGE_PRESETS = [
   {
     id: "neo-cyberglass",
