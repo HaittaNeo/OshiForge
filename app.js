@@ -103,10 +103,14 @@ const DEFAULTS = {
   avatarShape: "hex",
   avatarBorder: 2,
   avatarGlow: 1.0,
+  nameColor: "#ffffff",
+  nameGlow: 0.45,
 
   customShapeCss: "",
   customCursorCss: "",
   extraCss: "",
+  commentPadding: 10,
+  replyBorderColor: "#49f6ff",
 };
 
 const BINDINGS = [
@@ -199,10 +203,14 @@ const BINDINGS = [
   ["avatarShape", "value", "avatarShape"],
   ["avatarBorder", "value", "avatarBorder"],
   ["avatarGlow", "value", "avatarGlow"],
+  ["nameColor", "value", "nameColor"],
+  ["nameGlow", "value", "nameGlow"],
 
   ["customShapeCss", "value", "customShapeCss"],
   ["customCursorCss", "value", "customCursorCss"],
   ["extraCss", "value", "extraCss"],
+  ["commentPadding", "value", "commentPadding"],
+  ["replyBorderColor", "value", "replyBorderColor"],
 ];
 
 const PRESETS = [
@@ -907,6 +915,8 @@ function buildCss(){
   const replyBg = state.replyBg;
   const replyTextColor = state.replyTextColor;
   const commentsAlpha = clamp(state.commentsAlpha, 0.1, 1);
+  const commentPadding = clamp(state.commentPadding, 0, 26);
+  const replyBorderColor = state.replyBorderColor;
   const presetCssRaw = String(activePresetCss || "").trim();
   const presetImports = presetCssRaw.match(/^\s*@import[^;]+;\s*$/gm) || [];
   const presetCssBody = presetCssRaw.replace(/^\s*@import[^;]+;\s*$/gm, "").trim();
@@ -954,6 +964,8 @@ function buildCss(){
   const avatarSize = clamp(state.avatarSize, 80, 280);
   const avatarBorder = clamp(state.avatarBorder, 0, 6);
   const avatarGlow = clamp(state.avatarGlow, 0, 2);
+  const nameColor = state.nameColor;
+  const nameGlow = clamp(state.nameGlow, 0, 2);
   const avatarMediaSelector = [
     `${selector} img.user-avatar.profile-avatar`,
     `${selector} .profile-main-card img.user-avatar`,
@@ -1136,6 +1148,7 @@ function buildCss(){
   css += `${selector} .social-links-list .social-link-item{background:${rgba("#101624",socialAlpha)} !important;border:1px solid ${rgba(primary,0.22)} !important;border-radius:12px !important;box-shadow:0 10px 24px rgba(0,0,0,0.55) !important;}\n`;
   css += `${selector} .social-links-list .social-link-item:hover{background:${rgba("#1a2234",Math.min(0.98, socialAlpha + 0.08))} !important;border-color:${rgba(primary,0.55)} !important;box-shadow:0 14px 34px rgba(0,0,0,0.62), 0 0 28px ${rgba(primary,0.22)} !important;}\n`;
   css += `${selector} .social-links-list .social-link-platform{color:${rgba(text,0.92)} !important;letter-spacing:0.6px;}\n`;
+  css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n`;
   css += `${selector} .profile-tagline{color:${taglineColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-title{color:${blurbTitleColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-content{color:${blurbTextColor} !important;}\n`;
@@ -1145,9 +1158,12 @@ function buildCss(){
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
   css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border-color:${rgba(commentsBorderColor,0.35)} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
 
   // Custom cursor CSS (advanced, appended raw)
   if (state.customCursorCss.trim()){
@@ -1274,6 +1290,7 @@ function buildCss(){
   css += `${selector} .card-header.hearted::before{background:none !important;background-image:none !important;filter:none !important;display:inline-block !important;position:static !important;width:auto !important;height:auto !important;left:auto !important;top:auto !important;transform:none !important;margin-right:8px !important;}\n`;
   css += `${selector} .card-header.starred::before{content:"${starIcon}" !important;}\n`;
   css += `${selector} .card-header.hearted::before{content:"${heartIcon}" !important;}\n`;
+  css += `${selector} .profile-display-name{position:relative !important;z-index:2 !important;display:inline-block !important;color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n`;
   css += `${selector} .profile-tagline{color:${taglineColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-title{color:${blurbTitleColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-content{color:${blurbTextColor} !important;}\n`;
@@ -1283,9 +1300,12 @@ function buildCss(){
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${rgba(commentsBorderColor,0.45)} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
   css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border-color:${rgba(commentsBorderColor,0.35)} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${rgba(replyBorderColor,0.45)} !important;}\n`;
+  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
   css += `${avatarMediaSelector}{box-shadow: 0 0 ${Math.round(30 + 28 * avatarGlow)}px ${rgba(primary,0.25 + 0.35*avatarGlow)}, 0 0 ${Math.round(80 + 50 * avatarGlow)}px ${rgba(secondary,0.15 + 0.25*avatarGlow)}, 0 18px 50px rgba(0,0,0,0.85) !important;}\n`;
   css += `${avatarMediaSelector}:hover{box-shadow:0 0 ${Math.round(45 + 36 * avatarGlow)}px ${rgba(primary,0.35 + 0.45*avatarGlow)}, 0 0 ${Math.round(120 + 80 * avatarGlow)}px ${rgba(secondary,0.2 + 0.35*avatarGlow)}, 0 0 ${Math.round(200 + 120 * avatarGlow)}px ${rgba(primary,0.12 + 0.25*avatarGlow)}, 0 30px 80px rgba(0,0,0,0.95) !important;}\n`;
 
@@ -1345,6 +1365,59 @@ function renderPreview(){
   .byline{margin:0 0 12px;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:10px;font-size:11px;opacity:.9}
   .byline a{text-decoration:none}
   .profile-avatar{border-radius:0 !important;} /* critical: don't fight generated shapes */
+  .comments-card .card-body{padding:0}
+  .add-comment{padding:12px}
+  .comment-editor{
+    width:100%;
+    min-height:76px;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:8px;
+    padding:10px;
+    font-size:12px;
+    line-height:1.45;
+    outline:none;
+    white-space:pre-wrap;
+  }
+  .comment-editor-actions{margin-top:8px}
+  .action-btn.primary{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .profile-comment{
+    display:flex;
+    gap:10px;
+    margin:0 12px 12px;
+    padding:10px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;
+  }
+  .comment-avatar{width:50px;height:50px;border-radius:8px;object-fit:cover;flex-shrink:0}
+  .comment-content{flex:1;min-width:0}
+  .comment-meta{font-size:12px;margin-bottom:4px}
+  .comment-author-name{font-weight:700}
+  .comment-time{opacity:.75}
+  .comment-body{font-size:12px;line-height:1.55}
+  .comment-actions{font-size:11px;margin-top:6px;opacity:.9}
+  .comment-reply{
+    margin-top:8px;
+    border-left:2px solid rgba(255,255,255,.2);
+    padding:8px 0 0 10px;
+  }
+  .comment-reply textarea{
+    width:100%;
+    min-height:48px;
+    resize:vertical;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:8px;
+    padding:8px;
+    font-size:12px;
+    line-height:1.4;
+    outline:none;
+  }
 </style>
 </head>
 <body>
@@ -1433,6 +1506,48 @@ function renderPreview(){
             <iframe width="100%" height="80" src="https://www.youtube.com/embed/QO_W4I-bsHg" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
           </div>
         </div>
+
+        <div class="card comments-card" id="comments">
+          <div class="card-header hearted"><span>~.::HaittaNEO::.~'s Friend Comments</span><a href="#">View All (9)</a></div>
+          <div class="card-body">
+            <div class="add-comment">
+              <div class="comment-editor" contenteditable="true" role="textbox" aria-label="Leave a comment">Leave a comment for ~.::HaittaNEO::.~...</div>
+              <div class="comment-editor-actions"><button class="action-btn primary" type="button">Post Comment</button></div>
+            </div>
+
+            <div class="profile-comment">
+              <img class="user-avatar comment-avatar" src="https://myoshi.jinxxy-cdn.com/avatars/user_01kj4qg9twesj81xk2jxrr083z/bce74e56-20d0-4a49-a550-722ef23834a6.png?width=100&height=100" alt="Mitzii_Art">
+              <div class="comment-content">
+                <div class="comment-meta"><a class="comment-author-name" href="#">Mitzii_Art</a><span class="comment-time"> - 15m ago</span></div>
+                <div class="comment-body">TYYY for oshiforge you are so goated
+(*^_^*)</div>
+                <div class="comment-actions"><a href="#">Reply</a></div>
+              </div>
+            </div>
+
+            <div class="profile-comment">
+              <img class="user-avatar comment-avatar" src="https://myoshi.jinxxy-cdn.com/avatars/user_01kj1r9vd4f6et9wnefs96wcc2/19121d44-1c27-4003-8477-e5af3a753c42.gif?width=100&height=100" alt="marime">
+              <div class="comment-content">
+                <div class="comment-meta"><a class="comment-author-name" href="#">marime</a><span class="comment-time"> - 22m ago</span></div>
+                <div class="comment-body">Thank you so much for your work on Oshiforge!!</div>
+                <div class="comment-actions"><a href="#">Reply</a></div>
+              </div>
+            </div>
+
+            <div class="profile-comment">
+              <img class="user-avatar comment-avatar" src="https://myoshi.jinxxy-cdn.com/avatars/user_01kgtrcnf3fzsba1c29h0fcgbs/1d201d89-27d5-448a-914c-1f58f771ed7a.jpg?width=100&height=100" alt="suzy_q">
+              <div class="comment-content">
+                <div class="comment-meta"><a class="comment-author-name" href="#">suzy_q</a><span class="comment-time"> - 2h ago</span></div>
+                <div class="comment-body">Love the layout and border glow.</div>
+                <div class="comment-reply">
+                  <div class="comment-meta"><a class="comment-author-name" href="#">~.::HaittaNEO::.~</a><span class="comment-time"> - 2h ago</span></div>
+                  <textarea aria-label="Reply preview">Yes! That was so much fun! Let's plan another one.</textarea>
+                </div>
+                <div class="comment-actions"><a href="#">Reply</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1463,6 +1578,7 @@ function renderAll(persist = true){
   setHint("decorBorderGlowLabel", `Glow: ${Number(state.decorBorderGlow).toFixed(2)}`);
   setHint("decorBorderRadiusLabel", `${state.decorBorderRadius}px`);
   setHint("commentsAlphaLabel", `Alpha: ${Number(state.commentsAlpha).toFixed(2)}`);
+  setHint("commentPaddingLabel", `${Math.round(state.commentPadding)}px`);
   setHint("hoverScaleLabel", `${Number(state.hoverScale).toFixed(2)}x`);
   setHint("shadowStrengthLabel", `x${Number(state.shadowStrength).toFixed(2)}`);
   setHint("baseFontSizeLabel", `${state.baseFontSize}px`);
@@ -1481,6 +1597,7 @@ function renderAll(persist = true){
   setHint("avatarSizeLabel", `${state.avatarSize}px`);
   setHint("avatarBorderLabel", `${state.avatarBorder}px`);
   setHint("avatarGlowLabel", `Glow: ${Number(state.avatarGlow).toFixed(2)}`);
+  setHint("nameGlowLabel", `Glow: ${Number(state.nameGlow).toFixed(2)}`);
 
   const css = buildCss();
   $("cssOut").value = css;

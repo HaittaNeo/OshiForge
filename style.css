@@ -43,6 +43,31 @@ body{
 }
 .title{font-weight:800;letter-spacing:.3px}
 .subtitle{font-size:12px;color:var(--muted)}
+.socialMini{
+  display:flex;
+  gap:8px;
+  margin-top:6px;
+}
+.socialMini a{
+  width:18px;
+  height:18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(235,243,255,.74);
+  opacity:.85;
+  transition:opacity .15s ease, transform .15s ease, color .15s ease;
+}
+.socialMini a:hover{
+  opacity:1;
+  transform:translateY(-1px);
+  color:rgba(73,246,255,.95);
+}
+.socialIcon{
+  width:16px;
+  height:16px;
+  fill:currentColor;
+}
 
 .actions{display:flex;gap:10px}
 .btn{
