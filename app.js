@@ -54,6 +54,8 @@ const DEFAULTS = {
   preserveLineBreaks: true,
 
   panelAlpha: 0.78,
+  panelBaseColor: "#0a0e16",
+  panelHoverBaseColor: "#121a28",
   borderAlpha: 0.22,
   glowStrength: 0.45,
 
@@ -199,6 +201,8 @@ const BINDINGS = [
   ["preserveLineBreaks", "checked", "preserveLineBreaks"],
 
   ["panelAlpha", "value", "panelAlpha"],
+  ["panelBaseColor", "value", "panelBaseColor"],
+  ["panelHoverBaseColor", "value", "panelHoverBaseColor"],
   ["borderAlpha", "value", "borderAlpha"],
   ["glowStrength", "value", "glowStrength"],
 
@@ -1151,7 +1155,9 @@ function buildCss(){
   const forceReadableTextFinal = forceReadableText || Boolean(state.fixDarkText);
   const preserveLineBreaks = Boolean(state.preserveLineBreaks);
 
-  const panel = rgba("#0a0e16", clamp(state.panelAlpha, 0.2, 0.95));
+  const panelBaseColor = state.panelBaseColor;
+  const panelHoverBaseColor = state.panelHoverBaseColor;
+  const panel = rgba(panelBaseColor, clamp(state.panelAlpha, 0.2, 0.95));
   const border = rgba(primary, clamp(state.borderAlpha, 0.05, 0.9));
   const buttonBg = state.btnBg;
   const buttonText = state.btnText;
@@ -1544,7 +1550,7 @@ function buildCss(){
   css += `${selector} .add-comment:hover,\n`;
   css += `${selector} .profile-url-box:hover,\n`;
   css += `${selector} .friends-grid a.friend-item:hover{\n`;
-  css += `  background: ${rgba("#0a0e16", Math.min(0.98, clamp(state.panelAlpha, 0.2, 0.95) + 0.08))} !important;\n`;
+  css += `  background: ${rgba(panelHoverBaseColor, Math.min(0.98, clamp(state.panelAlpha, 0.2, 0.95) + 0.08))} !important;\n`;
   css += `  background-image: none !important;\n`;
   css += `}\n`;
   css += `${selector} .profile-top-bar{background:${rgba("#000000", topbarAlpha)} !important;backdrop-filter:blur(${glassBlurSoft}px) !important;-webkit-backdrop-filter:blur(${glassBlurSoft}px) !important;}\n`;
