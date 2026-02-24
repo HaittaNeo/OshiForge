@@ -1496,6 +1496,7 @@ function buildCss(){
   css += `${selector} .interest-content{color:${interestTextColor} !important;}\n`;
   if (forceReadableTextFinal){
     css += `${selector} .blurb-section .blurb-content, ${selector} .blurb-section .blurb-content *, ${selector} .profile-custom-html, ${selector} .profile-custom-html *, ${selector} .interest-content, ${selector} .interest-content *{color:${aboutBodyColor} !important;}\n`;
+    css += `${selector} .card-body p, ${selector} .card-body li, ${selector} .card-body span, ${selector} .card-body div, ${selector} .panel-body p, ${selector} .panel-body li, ${selector} .panel-body span, ${selector} .panel-body div, ${selector} .module-body p, ${selector} .module-body li, ${selector} .module-body span, ${selector} .module-body div{color:${aboutBodyColor} !important;opacity:1 !important;}\n`;
   }
   css += `${selector} .profile-mood, ${selector} .mood-display, ${selector} .profile-status{background:${rgba(moodBgColor,0.92)} !important;border:1px solid ${rgba(moodBorderColor,0.55)} !important;color:${moodTextColor} !important;}\n`;
   css += `${selector} .profile-mood *, ${selector} .mood-display *, ${selector} .profile-status *, ${selector} .mood-text{color:${moodTextColor} !important;}\n`;
@@ -1662,6 +1663,7 @@ function buildCss(){
   css += `${selector} .interest-content{color:${interestTextColor} !important;}\n`;
   if (forceReadableTextFinal){
     css += `${selector} .blurb-section .blurb-content, ${selector} .blurb-section .blurb-content *, ${selector} .profile-custom-html, ${selector} .profile-custom-html *, ${selector} .interest-content, ${selector} .interest-content *{color:${aboutBodyColor} !important;}\n`;
+    css += `${selector} .card-body p, ${selector} .card-body li, ${selector} .card-body span, ${selector} .card-body div, ${selector} .panel-body p, ${selector} .panel-body li, ${selector} .panel-body span, ${selector} .panel-body div, ${selector} .module-body p, ${selector} .module-body li, ${selector} .module-body span, ${selector} .module-body div{color:${aboutBodyColor} !important;opacity:1 !important;}\n`;
   }
   css += `${selector} .social-links-list .social-link-item{display:inline-flex !important;align-items:center !important;justify-content:center !important;}\n`;
   css += `${selector} .social-links-list .social-link-platform, ${selector} .social-links-list .social-link-item, ${selector} .social-links-list .social-link-item *{color:${rgba(text,0.92)} !important;}\n`;
