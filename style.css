@@ -79,6 +79,14 @@ body{
   box-shadow:0 12px 26px rgba(0,0,0,.35);
 }
 .btn:hover{transform:translateY(-1px)}
+.topLinkTab{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:13px;
+  padding:10px 14px;
+}
 .btnPrimary{
   background:linear-gradient(90deg, rgba(73,246,255,.18), rgba(59,130,255,.14), rgba(179,107,255,.10));
   border:1px solid rgba(73,246,255,.28);
