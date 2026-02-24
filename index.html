@@ -38,22 +38,35 @@
   <main class="grid">
     <section class="panel">
       <div class="tabs" role="tablist" aria-label="Editor Tabs">
-        <button class="tabBtn active" data-tab="presets">Presets</button>
-        <button class="tabBtn" data-tab="colors">Colors</button>
-        <button class="tabBtn" data-tab="layout">Layout</button>
-        <button class="tabBtn" data-tab="type">Type</button>
-        <button class="tabBtn" data-tab="glass">Glass</button>
+        <button class="tabBtn active" data-tab="presets">Start Here</button>
+        <button class="tabBtn" data-tab="colors">Color Vibe</button>
+        <button class="tabBtn" data-tab="layout">Card Layout</button>
+        <button class="tabBtn" data-tab="type">Text Style</button>
+        <button class="tabBtn" data-tab="glass">Glass FX</button>
         <button class="tabBtn" data-tab="avatar">Avatar</button>
         <button class="tabBtn" data-tab="sections">Sections</button>
-        <button class="tabBtn" data-tab="advanced">Advanced</button>
+        <button class="tabBtn" data-tab="advanced">Power</button>
+      </div>
+      <div class="uxBar">
+        <div class="uxMode">
+          <label>Mode</label>
+          <select id="uiMode">
+            <option value="simple">Simple (Recommended)</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div class="uxBarActions">
+          <button id="btnResetSection" class="btn">Reset This Tab</button>
+        </div>
       </div>
 
       <div class="tabPanel active" data-tab-panel="presets">
-        <h2>Starter Templates</h2>
+        <h2>Start Here</h2>
         <div class="row two">
           <div>
             <label>Template preset</label>
             <select id="presetSelect"></select>
+            <div class="hint">Goal-based presets are a quick way to start.</div>
           </div>
           <div class="toolRow">
             <button id="btnRandomPalette" class="btn">Random Palette</button>
@@ -68,11 +81,32 @@
           <button id="btnExportTheme" class="btn">Export Theme</button>
           <button id="btnImportTheme" class="btn">Import Theme</button>
         </div>
+        <hr />
+        <h2>Output Filters</h2>
+        <div class="row">
+          <label><input id="snippetAvatarOnly" type="checkbox" /> Only show Avatar/Profile Pic code</label>
+          <label><input id="snippetTextOnly" type="checkbox" /> Only show Text/Headers/Blurb code</label>
+          <label><input id="snippetButtonsOnly" type="checkbox" /> Only show Buttons/Links code</label>
+          <label><input id="snippetCommentsOnly" type="checkbox" /> Only show Comments/Replies code</label>
+          <label><input id="snippetTaglineOnly" type="checkbox" /> Only show Tagline box glow code</label>
+          <div class="hint">If none are checked, OshiForge outputs full CSS as normal.</div>
+        </div>
+        <hr />
+        <h2>Quick Fixes</h2>
+        <div class="row">
+          <label><input id="fixDarkText" type="checkbox" /> Text too dark? Force readable text colors</label>
+        </div>
+        <div class="row">
+          <label><input id="fixHeaderStyle" type="checkbox" /> Header style not applying? Force header colors/gradient</label>
+        </div>
+        <div class="row">
+          <label><input id="fixCommentContrast" type="checkbox" /> Comments hard to read? Increase contrast automatically</label>
+        </div>
         <input id="themeFile" type="file" accept="application/json" hidden />
       </div>
 
       <div class="tabPanel" data-tab-panel="colors">
-        <h2>Palette</h2>
+        <h2>Color Vibe</h2>
         <div class="row three">
           <div><label>Primary</label><input id="cPrimary" type="color" /></div>
           <div><label>Secondary</label><input id="cSecondary" type="color" /></div>
@@ -99,7 +133,24 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="layout">
-        <h2>Layout & Cards</h2>
+        <h2>Profile Card Layout</h2>
+        <div class="row two">
+          <div>
+            <label>Layout preset</label>
+            <select id="layoutPreset">
+              <option value="default">Default (2 columns)</option>
+              <option value="single">Single column</option>
+              <option value="leftFocus">Left focus</option>
+              <option value="rightFocus">Right focus</option>
+              <option value="wiredStack">Centered stack</option>
+            </select>
+          </div>
+          <div>
+            <label>Right column max width</label>
+            <input id="rightColumnMax" type="range" min="420" max="1100" step="10" />
+            <div class="hint" id="rightColumnMaxLabel"></div>
+          </div>
+        </div>
         <div class="row two">
           <div>
             <label>Container width</label>
@@ -136,6 +187,33 @@
             <div class="hint" id="cardBorderWidthLabel"></div>
           </div>
         </div>
+        <hr />
+        <h2>Panel Visibility (Basic)</h2>
+        <div class="row three">
+          <label><input id="showTopbar" type="checkbox" /> Show top bar</label>
+          <label><input id="showTop8" type="checkbox" /> Show Top 8</label>
+          <label><input id="showSectionLinks" type="checkbox" /> Show section links</label>
+        </div>
+        <div class="row three">
+          <label><input id="showSocialLinks" type="checkbox" /> Show links card</label>
+          <label><input id="showDetails" type="checkbox" /> Show details card</label>
+          <label><input id="showSong" type="checkbox" /> Show song card</label>
+        </div>
+        <div class="row">
+          <label><input id="showComments" type="checkbox" /> Show comments card</label>
+        </div>
+        <hr />
+        <h2>Panel Order (Right Column)</h2>
+        <div class="row three">
+          <div><label>Top 8 order</label><input id="orderTop8" type="range" min="1" max="10" step="1" /><div class="hint" id="orderTop8Label"></div></div>
+          <div><label>Links order</label><input id="orderSocial" type="range" min="1" max="10" step="1" /><div class="hint" id="orderSocialLabel"></div></div>
+          <div><label>Details order</label><input id="orderDetails" type="range" min="1" max="10" step="1" /><div class="hint" id="orderDetailsLabel"></div></div>
+        </div>
+        <div class="row two">
+          <div><label>Song order</label><input id="orderSong" type="range" min="1" max="10" step="1" /><div class="hint" id="orderSongLabel"></div></div>
+          <div><label>Comments order</label><input id="orderComments" type="range" min="1" max="10" step="1" /><div class="hint" id="orderCommentsLabel"></div></div>
+        </div>
+        <hr />
         <div class="row">
           <label><input id="frameEnabled" type="checkbox" /> Enable image frame border</label>
         </div>
@@ -244,7 +322,7 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="type">
-        <h2>Typography & Headers</h2>
+        <h2>Text & Header Style</h2>
         <div class="row two">
           <div>
             <label>Body font</label>
@@ -304,7 +382,7 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="glass">
-        <h2>Glass</h2>
+        <h2>Transparency & Blur</h2>
         <div class="row two">
           <div>
             <label>Panel alpha</label>
@@ -344,7 +422,7 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="avatar">
-        <h2>Avatar</h2>
+        <h2>Avatar & Name</h2>
         <div class="row two">
           <div>
             <label>Avatar size</label>
@@ -384,7 +462,7 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="sections">
-        <h2>Sections & Buttons</h2>
+        <h2>Buttons & Visibility</h2>
         <div class="row">
           <label><input id="uniformLinks" type="checkbox" /> Keep contact/boop styles uniform</label>
         </div>
@@ -409,18 +487,8 @@
             <div class="hint" id="buttonHoverAlphaLabel"></div>
           </div>
         </div>
-        <div class="row three">
-          <label><input id="showTopbar" type="checkbox" /> Show top bar</label>
-          <label><input id="showTop8" type="checkbox" /> Show Top 8</label>
-          <label><input id="showSectionLinks" type="checkbox" /> Show section links</label>
-        </div>
-        <div class="row three">
-          <label><input id="showSocialLinks" type="checkbox" /> Show links card</label>
-          <label><input id="showDetails" type="checkbox" /> Show details card</label>
-          <label><input id="showSong" type="checkbox" /> Show song card</label>
-        </div>
         <hr />
-        <h2>Blurb & Interests</h2>
+        <h2>About, Blurbs & Interests</h2>
         <div class="row three">
           <div><label>Blurb title</label><input id="blurbTitleColor" type="color" /></div>
           <div><label>Blurb text</label><input id="blurbTextColor" type="color" /></div>
@@ -432,7 +500,51 @@
           <div><label>Tagline text</label><input id="taglineColor" type="color" /></div>
         </div>
         <div class="row">
+          <label><input id="taglineBoxEnabled" type="checkbox" /> Enable tagline box glow (for the quote box under username)</label>
+        </div>
+        <div class="row three">
+          <div><label>Tagline box bg</label><input id="taglineBoxBgColor" type="color" /></div>
+          <div><label>Tagline box border</label><input id="taglineBoxBorderColor" type="color" /></div>
+          <div>
+            <label>Tagline box alpha</label>
+            <input id="taglineBoxAlpha" type="range" min="0.1" max="1" step="0.01" />
+            <div class="hint" id="taglineBoxAlphaLabel"></div>
+          </div>
+        </div>
+        <div class="row three">
+          <div>
+            <label>Tagline glow</label>
+            <input id="taglineBoxGlow" type="range" min="0" max="2" step="0.01" />
+            <div class="hint" id="taglineBoxGlowLabel"></div>
+          </div>
+          <div>
+            <label>Tagline radius</label>
+            <input id="taglineBoxRadius" type="range" min="0" max="30" step="1" />
+            <div class="hint" id="taglineBoxRadiusLabel"></div>
+          </div>
+          <div>
+            <label>Tagline padding</label>
+            <input id="taglineBoxPadding" type="range" min="4" max="24" step="1" />
+            <div class="hint" id="taglineBoxPaddingLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div><label>About/body text</label><input id="aboutBodyColor" type="color" /></div>
+          <div><label>Header text</label><input id="headerTextColor" type="color" /></div>
+        </div>
+        <div class="row">
+          <label><input id="forceReadableText" type="checkbox" /> Force readable text in blurbs/interests/about</label>
+          <div class="hint">Tip: turn this on if text shows up gray/dark on your profile.</div>
+        </div>
+        <div class="row">
           <label><input id="preserveLineBreaks" type="checkbox" /> Preserve line breaks in blurbs/custom text</label>
+        </div>
+        <hr />
+        <h2>Mood / Activity Bar</h2>
+        <div class="row three">
+          <div><label>Bar bg</label><input id="moodBgColor" type="color" /></div>
+          <div><label>Bar text</label><input id="moodTextColor" type="color" /></div>
+          <div><label>Bar border</label><input id="moodBorderColor" type="color" /></div>
         </div>
         <hr />
         <h2>Comments & Replies</h2>
@@ -467,7 +579,78 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="advanced">
-        <h2>Advanced</h2>
+        <h2>Power Tools</h2>
+        <h2>Layout Lab (Move Things)</h2>
+        <div class="row two">
+          <div>
+            <label>Left column X</label>
+            <input id="leftColumnX" type="range" min="-300" max="300" step="1" />
+            <div class="hint" id="leftColumnXLabel"></div>
+          </div>
+          <div>
+            <label>Left column Y</label>
+            <input id="leftColumnY" type="range" min="-300" max="300" step="1" />
+            <div class="hint" id="leftColumnYLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Right column X</label>
+            <input id="rightColumnX" type="range" min="-300" max="300" step="1" />
+            <div class="hint" id="rightColumnXLabel"></div>
+          </div>
+          <div>
+            <label>Right column Y</label>
+            <input id="rightColumnY" type="range" min="-300" max="300" step="1" />
+            <div class="hint" id="rightColumnYLabel"></div>
+          </div>
+        </div>
+        <div class="row three">
+          <div><label>Top 8 X</label><input id="top8X" type="range" min="-300" max="300" step="1" /><div class="hint" id="top8XLabel"></div></div>
+          <div><label>Links X</label><input id="socialX" type="range" min="-300" max="300" step="1" /><div class="hint" id="socialXLabel"></div></div>
+          <div><label>Song X</label><input id="songX" type="range" min="-300" max="300" step="1" /><div class="hint" id="songXLabel"></div></div>
+        </div>
+        <div class="row three">
+          <div><label>Top 8 Y</label><input id="top8Y" type="range" min="-300" max="300" step="1" /><div class="hint" id="top8YLabel"></div></div>
+          <div><label>Links Y</label><input id="socialY" type="range" min="-300" max="300" step="1" /><div class="hint" id="socialYLabel"></div></div>
+          <div><label>Song Y</label><input id="songY" type="range" min="-300" max="300" step="1" /><div class="hint" id="songYLabel"></div></div>
+        </div>
+        <hr />
+        <h2>Shape Lab</h2>
+        <div class="row two">
+          <div>
+            <label>Card shape</label>
+            <select id="cardShapeStyle">
+              <option value="rounded">Rounded</option>
+              <option value="chamfer">Chamfer</option>
+              <option value="hex">Hex</option>
+            </select>
+          </div>
+          <div>
+            <label>Button shape</label>
+            <select id="buttonShapeStyle">
+              <option value="rounded">Rounded</option>
+              <option value="pill">Pill</option>
+              <option value="square">Square</option>
+              <option value="chamfer">Chamfer</option>
+            </select>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Shape intensity</label>
+            <input id="shapeChamferSize" type="range" min="4" max="30" step="1" />
+            <div class="hint" id="shapeChamferSizeLabel"></div>
+          </div>
+          <div>
+            <label>Shape border width</label>
+            <input id="shapeBorderWidth" type="range" min="0" max="4" step="1" />
+            <div class="hint" id="shapeBorderWidthLabel"></div>
+          </div>
+        </div>
+        <div class="row">
+          <label><input id="enableTwoColHelper" type="checkbox" /> Add 2-column helper classes for custom HTML (<code>.of-two-col</code>)</label>
+        </div>
         <div class="row">
           <label>Custom cursor CSS</label>
           <textarea id="customCursorCss" rows="6" placeholder="* { cursor: url('...') 16 16, auto !important; }"></textarea>

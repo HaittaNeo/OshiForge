@@ -41,6 +41,16 @@ const DEFAULTS = {
   interestTitleColor: "#ffffff",
   interestTextColor: "#e6f6ff",
   taglineColor: "#7cff9b",
+  taglineBoxEnabled: true,
+  taglineBoxBgColor: "#101624",
+  taglineBoxBorderColor: "#49f6ff",
+  taglineBoxAlpha: 0.55,
+  taglineBoxGlow: 0.8,
+  taglineBoxRadius: 16,
+  taglineBoxPadding: 10,
+  aboutBodyColor: "#ebf3ff",
+  headerTextColor: "#ffffff",
+  forceReadableText: true,
   preserveLineBreaks: true,
 
   panelAlpha: 0.78,
@@ -48,6 +58,8 @@ const DEFAULTS = {
   glowStrength: 0.45,
 
   containerWidth: 980,
+  rightColumnMax: 760,
+  layoutPreset: "default",
   panelGap: 14,
   cardPadding: 12,
   sectionSpacing: 14,
@@ -92,12 +104,38 @@ const DEFAULTS = {
   showSocialLinks: true,
   showDetails: true,
   showSong: true,
+  showComments: true,
+  orderTop8: 1,
+  orderSocial: 2,
+  orderDetails: 3,
+  orderSong: 4,
+  orderComments: 5,
+  leftColumnX: 0,
+  leftColumnY: 0,
+  rightColumnX: 0,
+  rightColumnY: 0,
+  top8X: 0,
+  top8Y: 0,
+  socialX: 0,
+  socialY: 0,
+  songX: 0,
+  songY: 0,
+  cardShapeStyle: "rounded",
+  buttonShapeStyle: "rounded",
+  shapeChamferSize: 14,
+  shapeBorderWidth: 1,
   commentsBg: "#101624",
   commentsTextColor: "#ebf3ff",
   commentsBorderColor: "#49f6ff",
   replyBg: "#0a0e16",
   replyTextColor: "#ebf3ff",
   commentsAlpha: 0.72,
+  moodBgColor: "#efe8d6",
+  moodTextColor: "#1a1f2d",
+  moodBorderColor: "#bfa76f",
+  fixDarkText: false,
+  fixHeaderStyle: false,
+  fixCommentContrast: false,
 
   avatarSize: 220,
   avatarShape: "hex",
@@ -109,9 +147,15 @@ const DEFAULTS = {
   customShapeCss: "",
   customCursorCss: "",
   extraCss: "",
+  snippetAvatarOnly: false,
+  snippetTextOnly: false,
+  snippetButtonsOnly: false,
+  snippetCommentsOnly: false,
+  snippetTaglineOnly: false,
   commentPadding: 10,
   replyBorderColor: "#49f6ff",
   commentBordersTransparent: false,
+  enableTwoColHelper: false,
 };
 
 const BINDINGS = [
@@ -142,6 +186,16 @@ const BINDINGS = [
   ["interestTitleColor", "value", "interestTitleColor"],
   ["interestTextColor", "value", "interestTextColor"],
   ["taglineColor", "value", "taglineColor"],
+  ["taglineBoxEnabled", "checked", "taglineBoxEnabled"],
+  ["taglineBoxBgColor", "value", "taglineBoxBgColor"],
+  ["taglineBoxBorderColor", "value", "taglineBoxBorderColor"],
+  ["taglineBoxAlpha", "value", "taglineBoxAlpha"],
+  ["taglineBoxGlow", "value", "taglineBoxGlow"],
+  ["taglineBoxRadius", "value", "taglineBoxRadius"],
+  ["taglineBoxPadding", "value", "taglineBoxPadding"],
+  ["aboutBodyColor", "value", "aboutBodyColor"],
+  ["headerTextColor", "value", "headerTextColor"],
+  ["forceReadableText", "checked", "forceReadableText"],
   ["preserveLineBreaks", "checked", "preserveLineBreaks"],
 
   ["panelAlpha", "value", "panelAlpha"],
@@ -149,6 +203,8 @@ const BINDINGS = [
   ["glowStrength", "value", "glowStrength"],
 
   ["containerWidth", "value", "containerWidth"],
+  ["rightColumnMax", "value", "rightColumnMax"],
+  ["layoutPreset", "value", "layoutPreset"],
   ["panelGap", "value", "panelGap"],
   ["cardPadding", "value", "cardPadding"],
   ["sectionSpacing", "value", "sectionSpacing"],
@@ -193,12 +249,38 @@ const BINDINGS = [
   ["showSocialLinks", "checked", "showSocialLinks"],
   ["showDetails", "checked", "showDetails"],
   ["showSong", "checked", "showSong"],
+  ["showComments", "checked", "showComments"],
+  ["orderTop8", "value", "orderTop8"],
+  ["orderSocial", "value", "orderSocial"],
+  ["orderDetails", "value", "orderDetails"],
+  ["orderSong", "value", "orderSong"],
+  ["orderComments", "value", "orderComments"],
+  ["leftColumnX", "value", "leftColumnX"],
+  ["leftColumnY", "value", "leftColumnY"],
+  ["rightColumnX", "value", "rightColumnX"],
+  ["rightColumnY", "value", "rightColumnY"],
+  ["top8X", "value", "top8X"],
+  ["top8Y", "value", "top8Y"],
+  ["socialX", "value", "socialX"],
+  ["socialY", "value", "socialY"],
+  ["songX", "value", "songX"],
+  ["songY", "value", "songY"],
+  ["cardShapeStyle", "value", "cardShapeStyle"],
+  ["buttonShapeStyle", "value", "buttonShapeStyle"],
+  ["shapeChamferSize", "value", "shapeChamferSize"],
+  ["shapeBorderWidth", "value", "shapeBorderWidth"],
   ["commentsBg", "value", "commentsBg"],
   ["commentsTextColor", "value", "commentsTextColor"],
   ["commentsBorderColor", "value", "commentsBorderColor"],
   ["replyBg", "value", "replyBg"],
   ["replyTextColor", "value", "replyTextColor"],
   ["commentsAlpha", "value", "commentsAlpha"],
+  ["moodBgColor", "value", "moodBgColor"],
+  ["moodTextColor", "value", "moodTextColor"],
+  ["moodBorderColor", "value", "moodBorderColor"],
+  ["fixDarkText", "checked", "fixDarkText"],
+  ["fixHeaderStyle", "checked", "fixHeaderStyle"],
+  ["fixCommentContrast", "checked", "fixCommentContrast"],
 
   ["avatarSize", "value", "avatarSize"],
   ["avatarShape", "value", "avatarShape"],
@@ -210,12 +292,72 @@ const BINDINGS = [
   ["customShapeCss", "value", "customShapeCss"],
   ["customCursorCss", "value", "customCursorCss"],
   ["extraCss", "value", "extraCss"],
+  ["snippetAvatarOnly", "checked", "snippetAvatarOnly"],
+  ["snippetTextOnly", "checked", "snippetTextOnly"],
+  ["snippetButtonsOnly", "checked", "snippetButtonsOnly"],
+  ["snippetCommentsOnly", "checked", "snippetCommentsOnly"],
+  ["snippetTaglineOnly", "checked", "snippetTaglineOnly"],
   ["commentPadding", "value", "commentPadding"],
   ["replyBorderColor", "value", "replyBorderColor"],
   ["commentBordersTransparent", "checked", "commentBordersTransparent"],
+  ["enableTwoColHelper", "checked", "enableTwoColHelper"],
 ];
 
 const PRESETS = [
+  {
+    id: "goal-clean-readable",
+    name: "Goal: Clean & Readable",
+    state: {
+      cPrimary: "#75d4ff",
+      cSecondary: "#5aa8ff",
+      cAccent: "#b7a8ff",
+      cText: "#f4f8ff",
+      panelAlpha: 0.86,
+      borderAlpha: 0.18,
+      glowStrength: 0.18,
+      headerTextColor: "#ffffff",
+      aboutBodyColor: "#ecf4ff",
+      forceReadableText: true,
+      fixDarkText: true,
+      fixHeaderStyle: true,
+      fixCommentContrast: true,
+      commentsAlpha: 0.82,
+    },
+  },
+  {
+    id: "goal-glowy-cyber",
+    name: "Goal: Glowy Cyber",
+    state: {
+      cPrimary: "#49f6ff",
+      cSecondary: "#3b82ff",
+      cAccent: "#ff6bd8",
+      cText: "#ebf8ff",
+      glowStrength: 0.55,
+      borderAlpha: 0.28,
+      taglineBoxEnabled: true,
+      taglineBoxGlow: 1.1,
+      avatarGlow: 1.2,
+      fixHeaderStyle: true,
+    },
+  },
+  {
+    id: "goal-soft-pastel",
+    name: "Goal: Soft Pastel",
+    state: {
+      cPrimary: "#b8e3ff",
+      cSecondary: "#bfaeff",
+      cAccent: "#ffd0e6",
+      cText: "#f8fbff",
+      panelAlpha: 0.9,
+      borderAlpha: 0.14,
+      glowStrength: 0.15,
+      cardRadius: 22,
+      buttonAlpha: 0.72,
+      topbarAlpha: 0.5,
+      sectionAlpha: 0.72,
+      socialAlpha: 0.78,
+    },
+  },
   {
     id: "neo-cyberglass",
     name: "Neo CyberGlass",
@@ -562,6 +704,24 @@ a, a:link {
 ];
 
 const STORAGE_KEY = "oshiforge_state_v2";
+const UI_MODE_KEY = "oshiforge_ui_mode_v1";
+
+const SIMPLE_CONTROL_IDS = new Set([
+  "presetSelect", "btnRandomPalette", "btnCopy", "btnSaveDraft", "btnLoadDraft", "btnExportTheme", "btnImportTheme",
+  "snippetAvatarOnly", "snippetTextOnly", "snippetButtonsOnly", "snippetCommentsOnly", "snippetTaglineOnly",
+  "fixDarkText", "fixHeaderStyle", "fixCommentContrast",
+  "cPrimary", "cSecondary", "cAccent", "cText", "linkColor", "linkHoverColor", "linkUnderline",
+  "containerWidth", "layoutPreset", "rightColumnMax", "cardRadius", "cardPadding",
+  "fontBody", "headerTextColor", "baseFontSize",
+  "panelAlpha", "glassBlur",
+  "avatarShape", "avatarSize", "avatarGlow", "nameColor", "nameGlow",
+  "btnBg", "btnText", "btnBorder", "btnHoverBg", "btnHoverText",
+  "blurbTextColor", "interestTextColor", "aboutBodyColor", "taglineColor",
+  "taglineBoxEnabled", "taglineBoxBgColor", "taglineBoxBorderColor", "taglineBoxGlow",
+  "commentsBg", "commentsTextColor", "replyBg", "replyTextColor", "commentBordersTransparent",
+  "showTopbar", "showTop8", "showSectionLinks", "showSocialLinks", "showDetails", "showSong", "showComments",
+  "forceReadableText",
+]);
 
 let state = { ...DEFAULTS };
 let activePresetCss = "";
@@ -702,14 +862,97 @@ function initTabs(){
   const activate = (name) => {
     tabs.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === name));
     panels.forEach((panel) => panel.classList.toggle("active", panel.dataset.tabPanel === name));
+    applyUiMode();
   };
   tabs.forEach((btn) => {
     btn.addEventListener("click", () => activate(btn.dataset.tab));
   });
 }
 
+function getActivePanel(){
+  return document.querySelector(".tabPanel.active");
+}
+
+function applyUiMode(){
+  const mode = ($("uiMode") && $("uiMode").value) || "simple";
+  const panel = getActivePanel();
+  const advTabBtn = document.querySelector('.tabBtn[data-tab="advanced"]');
+  if (advTabBtn) advTabBtn.style.display = mode === "simple" ? "none" : "";
+  if (mode === "simple" && panel && panel.dataset.tabPanel === "advanced"){
+    const startTab = document.querySelector('.tabBtn[data-tab="presets"]');
+    if (startTab) startTab.click();
+    return;
+  }
+  if (!panel) return;
+  const rows = panel.querySelectorAll(".row");
+  rows.forEach((row) => {
+    row.classList.remove("hiddenByMode");
+    if (mode !== "simple") return;
+    const controls = row.querySelectorAll("input[id], select[id], textarea[id], button[id]");
+    if (!controls.length) return;
+    const hasSimple = Array.from(controls).some((el) => SIMPLE_CONTROL_IDS.has(el.id));
+    if (!hasSimple) row.classList.add("hiddenByMode");
+  });
+}
+
+function initSectionGroups(){
+  const panels = Array.from(document.querySelectorAll(".tabPanel"));
+  panels.forEach((panel) => {
+    const heads = Array.from(panel.querySelectorAll(":scope > h2"));
+    heads.forEach((h2, idx) => {
+      if (h2.parentElement && h2.parentElement.classList.contains("sectionHeader")) return;
+      const groupClass = `section-${panel.dataset.tabPanel}-${idx}`;
+      const wrap = document.createElement("div");
+      wrap.className = "sectionHeader";
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "sectionToggle";
+      toggle.textContent = "Hide";
+      h2.parentNode.insertBefore(wrap, h2);
+      wrap.appendChild(h2);
+      wrap.appendChild(toggle);
+      let sib = wrap.nextElementSibling;
+      const groupNodes = [];
+      while (sib && !(sib.classList.contains("sectionHeader")) && sib.tagName !== "H2"){
+        groupNodes.push(sib);
+        sib.classList.add(groupClass);
+        sib = sib.nextElementSibling;
+      }
+      toggle.addEventListener("click", () => {
+        const hidden = toggle.textContent === "Show";
+        groupNodes.forEach((n) => { n.style.display = hidden ? "" : "none"; });
+        toggle.textContent = hidden ? "Hide" : "Show";
+      });
+    });
+  });
+}
+
+function resetCurrentTabToDefaults(){
+  const panel = getActivePanel();
+  if (!panel) return;
+  const controls = panel.querySelectorAll("input[id], select[id], textarea[id]");
+  const ids = new Set(Array.from(controls).map((el) => el.id));
+  for (const [id, , key] of BINDINGS){
+    if (ids.has(id)) state[key] = DEFAULTS[key];
+  }
+  syncUIFromState();
+  renderAll();
+}
+
+function initUsabilityTools(){
+  const mode = localStorage.getItem(UI_MODE_KEY);
+  if ($("uiMode") && (mode === "simple" || mode === "advanced")) $("uiMode").value = mode;
+  $("uiMode").addEventListener("change", () => {
+    localStorage.setItem(UI_MODE_KEY, $("uiMode").value);
+    applyUiMode();
+  });
+  $("btnResetSection").addEventListener("click", resetCurrentTabToDefaults);
+}
+
 function initUI(){
   initTabs();
+  initSectionGroups();
+  initUsabilityTools();
   // Populate shapes select
   const sel = $("avatarShape");
   sel.innerHTML = SHAPES.map(s => `<option value="${s.value}">${s.label}</option>`).join("");
@@ -895,6 +1138,17 @@ function buildCss(){
   const interestTitleColor = state.interestTitleColor;
   const interestTextColor = state.interestTextColor;
   const taglineColor = state.taglineColor;
+  const taglineBoxEnabled = Boolean(state.taglineBoxEnabled);
+  const taglineBoxBgColor = state.taglineBoxBgColor;
+  const taglineBoxBorderColor = state.taglineBoxBorderColor;
+  const taglineBoxAlpha = clamp(state.taglineBoxAlpha, 0.1, 1);
+  const taglineBoxGlow = clamp(state.taglineBoxGlow, 0, 2);
+  const taglineBoxRadius = clamp(state.taglineBoxRadius, 0, 30);
+  const taglineBoxPadding = clamp(state.taglineBoxPadding, 4, 24);
+  const aboutBodyColor = state.aboutBodyColor;
+  const headerTextColor = state.headerTextColor;
+  const forceReadableText = Boolean(state.forceReadableText);
+  const forceReadableTextFinal = forceReadableText || Boolean(state.fixDarkText);
   const preserveLineBreaks = Boolean(state.preserveLineBreaks);
 
   const panel = rgba("#0a0e16", clamp(state.panelAlpha, 0.2, 0.95));
@@ -917,11 +1171,20 @@ function buildCss(){
   const replyBg = state.replyBg;
   const replyTextColor = state.replyTextColor;
   const commentsAlpha = clamp(state.commentsAlpha, 0.1, 1);
+  const fixHeaderStyle = Boolean(state.fixHeaderStyle);
+  const fixCommentContrast = Boolean(state.fixCommentContrast);
+  const commentsTextFinal = fixCommentContrast ? "#f5f8ff" : commentsTextColor;
+  const replyTextFinal = fixCommentContrast ? "#f5f8ff" : replyTextColor;
+  const commentsAlphaFinal = fixCommentContrast ? Math.max(commentsAlpha, 0.82) : commentsAlpha;
+  const moodBgColor = state.moodBgColor;
+  const moodTextColor = state.moodTextColor;
+  const moodBorderColor = state.moodBorderColor;
   const commentPadding = clamp(state.commentPadding, 0, 26);
   const replyBorderColor = state.replyBorderColor;
   const commentBordersTransparent = Boolean(state.commentBordersTransparent);
   const commentBorderFinal = commentBordersTransparent ? "transparent" : rgba(commentsBorderColor, 0.45);
   const replyBorderFinal = commentBordersTransparent ? "transparent" : rgba(replyBorderColor, 0.45);
+  const enableTwoColHelper = Boolean(state.enableTwoColHelper);
   const presetCssRaw = String(activePresetCss || "").trim();
   const presetImports = presetCssRaw.match(/^\s*@import[^;]+;\s*$/gm) || [];
   const presetCssBody = presetCssRaw.replace(/^\s*@import[^;]+;\s*$/gm, "").trim();
@@ -935,6 +1198,8 @@ function buildCss(){
 
   const glow = clamp(state.glowStrength, 0, 1);
   const containerWidth = clamp(state.containerWidth, 760, 1400);
+  const rightColumnMax = clamp(state.rightColumnMax, 420, 1100);
+  const layoutPreset = ["default", "single", "leftFocus", "rightFocus", "wiredStack"].includes(state.layoutPreset) ? state.layoutPreset : "default";
   const panelGap = clamp(state.panelGap, 8, 40);
   const cardPadding = clamp(state.cardPadding, 6, 30);
   const sectionSpacing = clamp(state.sectionSpacing, 6, 30);
@@ -963,6 +1228,25 @@ function buildCss(){
   const lift = clamp(state.hoverLift, 0, 10);
   const hoverScale = clamp(state.hoverScale, 0.95, 1.08);
   const shadowStrength = clamp(state.shadowStrength, 0, 1.5);
+  const orderTop8 = clamp(state.orderTop8, 1, 10);
+  const orderSocial = clamp(state.orderSocial, 1, 10);
+  const orderDetails = clamp(state.orderDetails, 1, 10);
+  const orderSong = clamp(state.orderSong, 1, 10);
+  const orderComments = clamp(state.orderComments, 1, 10);
+  const leftColumnX = clamp(state.leftColumnX, -300, 300);
+  const leftColumnY = clamp(state.leftColumnY, -300, 300);
+  const rightColumnX = clamp(state.rightColumnX, -300, 300);
+  const rightColumnY = clamp(state.rightColumnY, -300, 300);
+  const top8X = clamp(state.top8X, -300, 300);
+  const top8Y = clamp(state.top8Y, -300, 300);
+  const socialX = clamp(state.socialX, -300, 300);
+  const socialY = clamp(state.socialY, -300, 300);
+  const songX = clamp(state.songX, -300, 300);
+  const songY = clamp(state.songY, -300, 300);
+  const cardShapeStyle = ["rounded", "chamfer", "hex"].includes(state.cardShapeStyle) ? state.cardShapeStyle : "rounded";
+  const buttonShapeStyle = ["rounded", "pill", "square", "chamfer"].includes(state.buttonShapeStyle) ? state.buttonShapeStyle : "rounded";
+  const shapeChamferSize = clamp(state.shapeChamferSize, 4, 30);
+  const shapeBorderWidth = clamp(state.shapeBorderWidth, 0, 4);
 
   // Avatar geometry
   const geo = getAvatarGeometry(state.avatarShape);
@@ -1013,6 +1297,42 @@ function buildCss(){
   // Core containers
   css += `${selector} .container{max-width:${containerWidth}px !important;background:transparent !important;}\n`;
   css += `${selector} .profile-layout{gap:${panelGap}px !important;}\n`;
+  css += `${selector} .profile-right{max-width:${rightColumnMax}px !important;display:flex !important;flex-direction:column !important;}\n`;
+  if (layoutPreset === "single"){
+    css += `${selector} .profile-layout{display:grid !important;grid-template-columns:1fr !important;}\n`;
+    css += `${selector} .profile-left, ${selector} .profile-right{max-width:${Math.min(containerWidth - 40, 920)}px !important;margin:0 auto !important;}\n`;
+  } else if (layoutPreset === "leftFocus"){
+    css += `${selector} .profile-layout{display:grid !important;grid-template-columns:420px 1fr !important;}\n`;
+  } else if (layoutPreset === "rightFocus"){
+    css += `${selector} .profile-layout{display:grid !important;grid-template-columns:280px 1fr !important;}\n`;
+  } else if (layoutPreset === "wiredStack"){
+    css += `${selector} .profile-layout{display:flex !important;flex-direction:column !important;align-items:center !important;gap:${Math.max(16,panelGap)}px !important;}\n`;
+    css += `${selector} .profile-left{max-width:440px !important;width:100% !important;}\n`;
+    css += `${selector} .profile-right{max-width:${rightColumnMax}px !important;width:100% !important;}\n`;
+  }
+  css += `${selector} .profile-left{transform:translate(${leftColumnX}px, ${leftColumnY}px) !important;}\n`;
+  css += `${selector} .profile-right{transform:translate(${rightColumnX}px, ${rightColumnY}px) !important;}\n`;
+  css += `${selector} .mod-top8{order:${orderTop8} !important;transform:translate(${top8X}px, ${top8Y}px) !important;}\n`;
+  css += `${selector} .mod-social{order:${orderSocial} !important;transform:translate(${socialX}px, ${socialY}px) !important;}\n`;
+  css += `${selector} .mod-details{order:${orderDetails} !important;}\n`;
+  css += `${selector} .mod-song{order:${orderSong} !important;transform:translate(${songX}px, ${songY}px) !important;}\n`;
+  css += `${selector} .mod-comments{order:${orderComments} !important;}\n`;
+  if (cardShapeStyle === "chamfer"){
+    const chamfer = `polygon(${shapeChamferSize}px 0, calc(100% - ${shapeChamferSize}px) 0, 100% ${shapeChamferSize}px, 100% calc(100% - ${shapeChamferSize}px), calc(100% - ${shapeChamferSize}px) 100%, ${shapeChamferSize}px 100%, 0 calc(100% - ${shapeChamferSize}px), 0 ${shapeChamferSize}px)`;
+    css += `${selector} .card{border-radius:0 !important;clip-path:${chamfer} !important;-webkit-clip-path:${chamfer} !important;border-width:${shapeBorderWidth}px !important;}\n`;
+  } else if (cardShapeStyle === "hex"){
+    css += `${selector} .card{border-radius:0 !important;clip-path:polygon(2% 10%, 10% 2%, 90% 2%, 98% 10%, 98% 90%, 90% 98%, 10% 98%, 2% 90%) !important;-webkit-clip-path:polygon(2% 10%, 10% 2%, 90% 2%, 98% 10%, 98% 90%, 90% 98%, 10% 98%, 2% 90%) !important;border-width:${shapeBorderWidth}px !important;}\n`;
+  } else {
+    css += `${selector} .card{clip-path:none !important;-webkit-clip-path:none !important;border-radius:${cardRadius}px !important;border-width:${shapeBorderWidth > 0 ? shapeBorderWidth : cardBorderWidth}px !important;}\n`;
+  }
+  if (buttonShapeStyle === "pill"){
+    css += `${selector} .profile-contact-links a.contact-link, ${selector} .profile-contact-links a.boop-link, ${selector} a.contact-link, ${selector} a.boop-link, ${selector} .social-links-list .social-link-item{border-radius:999px !important;clip-path:none !important;-webkit-clip-path:none !important;}\n`;
+  } else if (buttonShapeStyle === "square"){
+    css += `${selector} .profile-contact-links a.contact-link, ${selector} .profile-contact-links a.boop-link, ${selector} a.contact-link, ${selector} a.boop-link, ${selector} .social-links-list .social-link-item{border-radius:0 !important;clip-path:none !important;-webkit-clip-path:none !important;}\n`;
+  } else if (buttonShapeStyle === "chamfer"){
+    const bChamfer = `polygon(${Math.max(6, Math.round(shapeChamferSize * 0.6))}px 0, calc(100% - ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px) 0, 100% ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px, 100% calc(100% - ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px), calc(100% - ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px) 100%, ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px 100%, 0 calc(100% - ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px), 0 ${Math.max(6, Math.round(shapeChamferSize * 0.6))}px)`;
+    css += `${selector} .profile-contact-links a.contact-link, ${selector} .profile-contact-links a.boop-link, ${selector} a.contact-link, ${selector} a.boop-link, ${selector} .social-links-list .social-link-item{border-radius:0 !important;clip-path:${bChamfer} !important;-webkit-clip-path:${bChamfer} !important;}\n`;
+  }
   css += `${selector} a{color:${linkColor} !important;text-decoration:${linkUnderline} !important;font-weight:${linkWeight} !important;transition:color 140ms ease,text-shadow 140ms ease,transform 140ms ease;}\n`;
   css += `${selector} a:hover{color:${linkHoverColor} !important;text-shadow:0 0 14px ${rgba(linkHoverColor,0.35)};}\n\n`;
 
@@ -1037,6 +1357,7 @@ function buildCss(){
   css += `${selector} .card-header{\n`;
   css += `  background: linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;\n`;
   css += `  border-bottom: 1px solid rgba(255,255,255,0.08);\n`;
+  css += `  color: ${headerTextColor} !important;\n`;
   css += `  letter-spacing: 1.3px;\n`;
   css += `  font-size: ${headerFontSize}px;\n`;
   css += `  text-transform: ${headerUppercase};\n`;
@@ -1153,23 +1474,34 @@ function buildCss(){
   // Social list items
   css += `${selector} .social-links-list .social-link-item{background:${rgba("#101624",socialAlpha)} !important;border:1px solid ${rgba(primary,0.22)} !important;border-radius:12px !important;box-shadow:0 10px 24px rgba(0,0,0,0.55) !important;}\n`;
   css += `${selector} .social-links-list .social-link-item:hover{background:${rgba("#1a2234",Math.min(0.98, socialAlpha + 0.08))} !important;border-color:${rgba(primary,0.55)} !important;box-shadow:0 14px 34px rgba(0,0,0,0.62), 0 0 28px ${rgba(primary,0.22)} !important;}\n`;
-  css += `${selector} .social-links-list .social-link-platform{color:${rgba(text,0.92)} !important;letter-spacing:0.6px;}\n`;
+  css += `${selector} .social-links-list .social-link-item{display:inline-flex !important;align-items:center !important;justify-content:center !important;}\n`;
+  css += `${selector} .social-links-list .social-link-platform, ${selector} .social-links-list .social-link-item, ${selector} .social-links-list .social-link-item *{color:${rgba(text,0.92)} !important;letter-spacing:0.6px;}\n`;
   css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n`;
   css += `${selector} .profile-tagline{color:${taglineColor} !important;}\n`;
+  if (taglineBoxEnabled){
+    css += `${selector} .profile-tagline{display:inline-block !important;padding:${taglineBoxPadding}px ${Math.round(taglineBoxPadding * 1.6)}px !important;background:${rgba(taglineBoxBgColor, taglineBoxAlpha)} !important;border:1px solid ${rgba(taglineBoxBorderColor,0.55)} !important;border-radius:${taglineBoxRadius}px !important;box-shadow:0 0 ${Math.round(16 + (26 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.12 + 0.22 * taglineBoxGlow)},0 0 ${Math.round(40 + (52 * taglineBoxGlow))}px ${rgba(primary,0.08 + 0.16 * taglineBoxGlow)},0 12px 30px rgba(0,0,0,0.6) !important;transition:transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, filter 220ms ease !important;}\n`;
+    css += `${selector} .profile-tagline:hover{border-color:${rgba(taglineBoxBorderColor,0.85)} !important;box-shadow:0 0 ${Math.round(24 + (36 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.16 + 0.28 * taglineBoxGlow)},0 0 ${Math.round(60 + (78 * taglineBoxGlow))}px ${rgba(secondary,0.1 + 0.2 * taglineBoxGlow)},0 14px 34px rgba(0,0,0,0.66) !important;}\n`;
+  }
   css += `${selector} .blurb-section .blurb-title{color:${blurbTitleColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-content{color:${blurbTextColor} !important;}\n`;
   css += `${selector} .profile-custom-html{color:${customHtmlColor} !important;}\n`;
+  css += `${selector} .profile-about-me, ${selector} .about-me, ${selector} .blurb-section .blurb-content p, ${selector} .blurb-section .blurb-content li{color:${aboutBodyColor} !important;}\n`;
   css += `${selector} .interest-title{color:${interestTitleColor} !important;}\n`;
   css += `${selector} .interest-content{color:${interestTextColor} !important;}\n`;
+  if (forceReadableTextFinal){
+    css += `${selector} .blurb-section .blurb-content, ${selector} .blurb-section .blurb-content *, ${selector} .profile-custom-html, ${selector} .profile-custom-html *, ${selector} .interest-content, ${selector} .interest-content *{color:${aboutBodyColor} !important;}\n`;
+  }
+  css += `${selector} .profile-mood, ${selector} .mood-display, ${selector} .profile-status{background:${rgba(moodBgColor,0.92)} !important;border:1px solid ${rgba(moodBorderColor,0.55)} !important;color:${moodTextColor} !important;}\n`;
+  css += `${selector} .profile-mood *, ${selector} .mood-display *, ${selector} .profile-status *, ${selector} .mood-text{color:${moodTextColor} !important;}\n`;
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlphaFinal)} !important;color:${commentsTextFinal} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
   css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
-  css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
-  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
-  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
+  css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextFinal} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlphaFinal)} !important;color:${replyTextFinal} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlphaFinal)} !important;color:${replyTextFinal} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextFinal,0.72)} !important;}\n`;
 
   // Custom cursor CSS (advanced, appended raw)
   if (state.customCursorCss.trim()){
@@ -1296,22 +1628,44 @@ function buildCss(){
   css += `${selector} .card-header.hearted::before{background:none !important;background-image:none !important;filter:none !important;display:inline-block !important;position:static !important;width:auto !important;height:auto !important;left:auto !important;top:auto !important;transform:none !important;margin-right:8px !important;}\n`;
   css += `${selector} .card-header.starred::before{content:"${starIcon}" !important;}\n`;
   css += `${selector} .card-header.hearted::before{content:"${heartIcon}" !important;}\n`;
+  css += `${selector} .card-header{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;}\n`;
+  css += `${selector} .card-header, ${selector} .card-header *{color:${headerTextColor} !important;}\n`;
+  if (fixHeaderStyle){
+    css += `${selector} .panel .panel-heading, ${selector} .card-header, ${selector} .sectionHeader, ${selector} .profileSection h3, ${selector} .panel-heading, ${selector} .contentBox .title, ${selector} .module .title{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;background-image:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;}\n`;
+  }
   css += `${selector} .profile-display-name{position:relative !important;z-index:2 !important;display:inline-block !important;color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n`;
   css += `${selector} .profile-tagline{color:${taglineColor} !important;}\n`;
+  if (taglineBoxEnabled){
+    css += `${selector} .profile-tagline{display:inline-block !important;padding:${taglineBoxPadding}px ${Math.round(taglineBoxPadding * 1.6)}px !important;background:${rgba(taglineBoxBgColor, taglineBoxAlpha)} !important;border:1px solid ${rgba(taglineBoxBorderColor,0.55)} !important;border-radius:${taglineBoxRadius}px !important;box-shadow:0 0 ${Math.round(16 + (26 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.12 + 0.22 * taglineBoxGlow)},0 0 ${Math.round(40 + (52 * taglineBoxGlow))}px ${rgba(primary,0.08 + 0.16 * taglineBoxGlow)},0 12px 30px rgba(0,0,0,0.6) !important;transition:transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, filter 220ms ease !important;}\n`;
+    css += `${selector} .profile-tagline:hover{border-color:${rgba(taglineBoxBorderColor,0.85)} !important;box-shadow:0 0 ${Math.round(24 + (36 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.16 + 0.28 * taglineBoxGlow)},0 0 ${Math.round(60 + (78 * taglineBoxGlow))}px ${rgba(secondary,0.1 + 0.2 * taglineBoxGlow)},0 14px 34px rgba(0,0,0,0.66) !important;}\n`;
+  }
   css += `${selector} .blurb-section .blurb-title{color:${blurbTitleColor} !important;}\n`;
   css += `${selector} .blurb-section .blurb-content{color:${blurbTextColor} !important;}\n`;
   css += `${selector} .profile-custom-html{color:${customHtmlColor} !important;}\n`;
+  css += `${selector} .profile-about-me, ${selector} .about-me, ${selector} .blurb-section .blurb-content p, ${selector} .blurb-section .blurb-content li{color:${aboutBodyColor} !important;}\n`;
   css += `${selector} .interest-title{color:${interestTitleColor} !important;}\n`;
   css += `${selector} .interest-content{color:${interestTextColor} !important;}\n`;
+  if (forceReadableTextFinal){
+    css += `${selector} .blurb-section .blurb-content, ${selector} .blurb-section .blurb-content *, ${selector} .profile-custom-html, ${selector} .profile-custom-html *, ${selector} .interest-content, ${selector} .interest-content *{color:${aboutBodyColor} !important;}\n`;
+  }
+  css += `${selector} .social-links-list .social-link-item{display:inline-flex !important;align-items:center !important;justify-content:center !important;}\n`;
+  css += `${selector} .social-links-list .social-link-platform, ${selector} .social-links-list .social-link-item, ${selector} .social-links-list .social-link-item *{color:${rgba(text,0.92)} !important;}\n`;
+  css += `${selector} .profile-mood, ${selector} .mood-display, ${selector} .profile-status{background:${rgba(moodBgColor,0.92)} !important;border:1px solid ${rgba(moodBorderColor,0.55)} !important;color:${moodTextColor} !important;}\n`;
+  css += `${selector} .profile-mood *, ${selector} .mood-display *, ${selector} .profile-status *, ${selector} .mood-text{color:${moodTextColor} !important;}\n`;
   if (preserveLineBreaks){
     css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .status-message, ${selector} .comment-body{white-space:pre-wrap !important;}\n`;
   }
-  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlpha)} !important;color:${commentsTextColor} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
+  css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(commentsBg, commentsAlphaFinal)} !important;color:${commentsTextFinal} !important;border:1px solid ${commentBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
   css += `${selector} .profile-comment .comment-body, ${selector} .comment-content .comment-body{padding:${Math.max(0, Math.round(commentPadding * 0.7))}px 0 !important;}\n`;
-  css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextColor} !important;}\n`;
-  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
-  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlpha)} !important;color:${replyTextColor} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
-  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextColor,0.72)} !important;}\n`;
+  css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsTextFinal} !important;}\n`;
+  css += `${selector} .add-comment, ${selector} .add-comment [contenteditable=\"true\"], ${selector} .add-comment textarea{background:${rgba(replyBg, commentsAlphaFinal)} !important;color:${replyTextFinal} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"], ${selector} .comment-content textarea, ${selector} .comment-content input[type="text"], ${selector} .comment-content [contenteditable="true"]{background:${rgba(replyBg, commentsAlphaFinal)} !important;color:${replyTextFinal} !important;border:1px solid ${replyBorderFinal} !important;}\n`;
+  css += `${selector} .add-comment textarea::placeholder, ${selector} .profile-comment textarea::placeholder, ${selector} .profile-comment input[type="text"]::placeholder, ${selector} .comment-content textarea::placeholder, ${selector} .comment-content input[type="text"]::placeholder{color:${rgba(replyTextFinal,0.72)} !important;}\n`;
+  if (enableTwoColHelper){
+    css += `${selector} .of-two-col{display:grid !important;grid-template-columns:repeat(2, minmax(0,1fr)) !important;gap:10px !important;align-items:start !important;}\n`;
+    css += `${selector} .of-two-col > *{min-width:0;}\n`;
+    css += `@media (max-width: 760px){${selector} .of-two-col{grid-template-columns:1fr !important;}}\n`;
+  }
   css += `${avatarMediaSelector}{box-shadow: 0 0 ${Math.round(30 + 28 * avatarGlow)}px ${rgba(primary,0.25 + 0.35*avatarGlow)}, 0 0 ${Math.round(80 + 50 * avatarGlow)}px ${rgba(secondary,0.15 + 0.25*avatarGlow)}, 0 18px 50px rgba(0,0,0,0.85) !important;}\n`;
   css += `${avatarMediaSelector}:hover{box-shadow:0 0 ${Math.round(45 + 36 * avatarGlow)}px ${rgba(primary,0.35 + 0.45*avatarGlow)}, 0 0 ${Math.round(120 + 80 * avatarGlow)}px ${rgba(secondary,0.2 + 0.35*avatarGlow)}, 0 0 ${Math.round(200 + 120 * avatarGlow)}px ${rgba(primary,0.12 + 0.25*avatarGlow)}, 0 30px 80px rgba(0,0,0,0.95) !important;}\n`;
 
@@ -1322,6 +1676,7 @@ function buildCss(){
   if (!state.showSocialLinks) css += `${selector} .mod-social{display:none !important;}\n`;
   if (!state.showDetails) css += `${selector} .mod-details{display:none !important;}\n`;
   if (!state.showSong) css += `${selector} .mod-song{display:none !important;}\n`;
+  if (!state.showComments) css += `${selector} .mod-comments{display:none !important;}\n`;
 
   if (state.extraCss.trim()){
     css += `\n${state.extraCss.trim()}\n`;
@@ -1330,8 +1685,114 @@ function buildCss(){
   return css;
 }
 
-function renderPreview(){
-  const css = buildCss();
+function buildSnippetCss(){
+  const selector = ".profile-page.profile-custom-css";
+  const primary = state.cPrimary;
+  const secondary = state.cSecondary;
+  const text = state.cText;
+  const linkColor = state.linkColor;
+  const linkHoverColor = state.linkHoverColor;
+  const linkWeight = clamp(state.linkWeight, 400, 900);
+  const linkUnderline = state.linkUnderline ? "underline" : "none";
+  const headerGradStart = state.headerGradStart;
+  const headerGradMid = state.headerGradMid;
+  const headerGradEnd = state.headerGradEnd;
+  const headerTextColor = state.headerTextColor;
+  const starIcon = cssContentString((state.starIcon || "").trim() || "⭐");
+  const heartIcon = cssContentString((state.heartIcon || "").trim() || "💚");
+  const commentsBorderFinal = state.commentBordersTransparent ? "transparent" : rgba(state.commentsBorderColor, 0.45);
+  const replyBorderFinal = state.commentBordersTransparent ? "transparent" : rgba(state.replyBorderColor, 0.45);
+  const commentsAlpha = clamp(state.commentsAlpha, 0.1, 1);
+  const commentsText = state.fixCommentContrast ? "#f5f8ff" : state.commentsTextColor;
+  const replyText = state.fixCommentContrast ? "#f5f8ff" : state.replyTextColor;
+  const commentPadding = clamp(state.commentPadding, 0, 26);
+  const geo = getAvatarGeometry(state.avatarShape);
+  const avatarSize = clamp(state.avatarSize, 80, 280);
+  const avatarBorder = clamp(state.avatarBorder, 0, 6);
+  const avatarGlow = clamp(state.avatarGlow, 0, 2);
+  const nameColor = state.nameColor;
+  const nameGlow = clamp(state.nameGlow, 0, 2);
+  const taglineBoxEnabled = Boolean(state.taglineBoxEnabled);
+  const taglineBoxBgColor = state.taglineBoxBgColor;
+  const taglineBoxBorderColor = state.taglineBoxBorderColor;
+  const taglineBoxAlpha = clamp(state.taglineBoxAlpha, 0.1, 1);
+  const taglineBoxGlow = clamp(state.taglineBoxGlow, 0, 2);
+  const taglineBoxRadius = clamp(state.taglineBoxRadius, 0, 30);
+  const taglineBoxPadding = clamp(state.taglineBoxPadding, 4, 24);
+  const avatarMediaSelector = [
+    `${selector} img.user-avatar.profile-avatar`,
+    `${selector} .profile-main-card img.user-avatar`,
+    `${selector} .profile-main-card img.profile-avatar`,
+    `${selector} .profile-main-card img[class*="avatar"]`,
+    `${selector} .profile-main-card [class*="avatar"] img`,
+    `${selector} .profile-main-card .avatar img`,
+  ].join(", ");
+
+  const chosen = [
+    state.snippetAvatarOnly,
+    state.snippetTextOnly,
+    state.snippetButtonsOnly,
+    state.snippetCommentsOnly,
+    state.snippetTaglineOnly,
+  ].some(Boolean);
+  if (!chosen) return buildCss();
+
+  let css = "/* Code generated by OshiForge | @HaittaNEO */\n";
+  css += "/* Snippet mode: only selected sections */\n\n";
+
+  if (state.snippetAvatarOnly){
+    css += `/* Avatar */\n`;
+    css += `${avatarMediaSelector}{width:${avatarSize}px !important;height:${avatarSize}px !important;object-fit:cover !important;border:${avatarBorder}px solid ${rgba(primary,0.55)} !important;box-shadow:0 0 ${Math.round(30 + 28 * avatarGlow)}px ${rgba(primary,0.25 + 0.35*avatarGlow)},0 0 ${Math.round(80 + 50 * avatarGlow)}px ${rgba(secondary,0.15 + 0.25*avatarGlow)} !important;}\n`;
+    if (geo.maskSvg){
+      css += `${avatarMediaSelector}{border-radius:0 !important;-webkit-mask-image:url("${geo.maskSvg}");mask-image:url("${geo.maskSvg}");-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;}\n`;
+    } else if (geo.clipPath){
+      css += `${avatarMediaSelector}{border-radius:0 !important;clip-path:${geo.clipPath} !important;-webkit-clip-path:${geo.clipPath} !important;}\n`;
+    } else {
+      css += `${avatarMediaSelector}{border-radius:${geo.radius} !important;}\n`;
+    }
+    css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n\n`;
+  }
+
+  if (state.snippetTextOnly){
+    css += `/* Text + Headers */\n`;
+    css += `${selector} .card-header{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;}\n`;
+    css += `${selector} .card-header, ${selector} .card-header *{color:${headerTextColor} !important;}\n`;
+    css += `${selector} .card-header.starred::before{content:"${starIcon}" !important;}\n`;
+    css += `${selector} .card-header.hearted::before{content:"${heartIcon}" !important;}\n`;
+    css += `${selector} .blurb-section .blurb-title{color:${state.blurbTitleColor} !important;}\n`;
+    css += `${selector} .blurb-section .blurb-content, ${selector} .profile-custom-html, ${selector} .interest-content{color:${state.aboutBodyColor} !important;}\n`;
+    css += `${selector} .interest-title{color:${state.interestTitleColor} !important;}\n`;
+    css += `${selector} .profile-tagline{color:${state.taglineColor} !important;}\n\n`;
+  }
+
+  if (state.snippetButtonsOnly){
+    css += `/* Buttons + Links */\n`;
+    css += `${selector} a{color:${linkColor} !important;text-decoration:${linkUnderline} !important;font-weight:${linkWeight} !important;}\n`;
+    css += `${selector} a:hover{color:${linkHoverColor} !important;}\n`;
+    css += `${selector} .profile-contact-links a.contact-link, ${selector} .profile-contact-links a.boop-link, ${selector} a.contact-link, ${selector} a.boop-link{background:${rgba(state.btnBg, clamp(state.buttonAlpha, 0.1, 0.95))} !important;color:${state.btnText} !important;border:1px solid ${rgba(state.btnBorder,0.35)} !important;}\n`;
+    css += `${selector} .profile-contact-links a.contact-link:hover, ${selector} .profile-contact-links a.boop-link:hover, ${selector} a.contact-link:hover, ${selector} a.boop-link:hover{background:${rgba(state.btnHoverBg, clamp(state.buttonHoverAlpha, 0.1, 0.98))} !important;color:${state.btnHoverText} !important;}\n`;
+    css += `${selector} .section-links a{color:${rgba(text,0.9)} !important;}\n`;
+    css += `${selector} .social-links-list .social-link-item, ${selector} .social-links-list .social-link-platform{color:${rgba(text,0.92)} !important;}\n\n`;
+  }
+
+  if (state.snippetCommentsOnly){
+    css += `/* Comments + Replies */\n`;
+    css += `${selector} .profile-comment, ${selector} .comment-content{background:${rgba(state.commentsBg, commentsAlpha)} !important;color:${commentsText} !important;border:1px solid ${commentsBorderFinal} !important;padding:${commentPadding}px !important;}\n`;
+    css += `${selector} .profile-comment *, ${selector} .comment-content *{color:${commentsText} !important;}\n`;
+    css += `${selector} .add-comment, ${selector} .add-comment [contenteditable="true"], ${selector} .add-comment textarea, ${selector} .profile-comment textarea, ${selector} .profile-comment input[type="text"], ${selector} .profile-comment [contenteditable="true"]{background:${rgba(state.replyBg, commentsAlpha)} !important;color:${replyText} !important;border:1px solid ${replyBorderFinal} !important;}\n\n`;
+  }
+
+  if (state.snippetTaglineOnly && taglineBoxEnabled){
+    css += `/* Tagline Box Glow */\n`;
+    css += `${selector} .profile-tagline{display:inline-block !important;padding:${taglineBoxPadding}px ${Math.round(taglineBoxPadding * 1.6)}px !important;background:${rgba(taglineBoxBgColor, taglineBoxAlpha)} !important;border:1px solid ${rgba(taglineBoxBorderColor,0.55)} !important;border-radius:${taglineBoxRadius}px !important;box-shadow:0 0 ${Math.round(16 + (26 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.12 + 0.22 * taglineBoxGlow)},0 0 ${Math.round(40 + (52 * taglineBoxGlow))}px ${rgba(primary,0.08 + 0.16 * taglineBoxGlow)},0 12px 30px rgba(0,0,0,0.6) !important;}\n`;
+    css += `${selector} .profile-tagline:hover{border-color:${rgba(taglineBoxBorderColor,0.85)} !important;box-shadow:0 0 ${Math.round(24 + (36 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.16 + 0.28 * taglineBoxGlow)},0 0 ${Math.round(60 + (78 * taglineBoxGlow))}px ${rgba(secondary,0.1 + 0.2 * taglineBoxGlow)} !important;}\n\n`;
+  }
+
+  return css;
+}
+
+function renderPreview(css){
+  const previewCss = css || buildCss();
 
   // Starter markup modeled after HaittaNEO's MyOshi profile layout
   const doc = `
@@ -1355,6 +1816,7 @@ function renderPreview(){
   .profile-username{opacity:.85;margin-top:4px}
   .profile-tagline{margin-top:10px;display:inline-block}
   .profile-oshi-mark{margin-top:10px;font-size:22px}
+  .profile-mood{margin-top:10px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);display:inline-flex;gap:6px;align-items:center}
   .profile-online-status,.profile-boop-stats{margin-top:6px;font-size:12px;opacity:.85}
   .profile-url-box{margin-top:10px;font-size:12px;opacity:.9}
   .profile-contact-links{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
@@ -1449,6 +1911,7 @@ function renderPreview(){
             <div class="profile-username">@haittaneo</div>
             <div class="profile-tagline">"Full stack do it from the front and the backend"</div>
             <div class="profile-oshi-mark">DEV / VTUBER</div>
+            <div class="profile-mood"><span class="mood-text">Productive</span> <span class="mood-display">💪</span></div>
             <div class="profile-online-status">Last online just now</div>
             <div class="profile-boop-stats">61 boops received</div>
             <div class="profile-url-box"><code>myoshi.co/haittaneo</code></div>
@@ -1513,7 +1976,7 @@ function renderPreview(){
           </div>
         </div>
 
-        <div class="card comments-card" id="comments">
+        <div class="card comments-card mod-comments" id="comments">
           <div class="card-header hearted"><span>~.::HaittaNEO::.~'s Friend Comments</span><a href="#">View All (9)</a></div>
           <div class="card-body">
             <div class="add-comment">
@@ -1559,7 +2022,7 @@ function renderPreview(){
   </div>
 </div>
 
-<style>${css}</style>
+<style>${previewCss}</style>
 </body>
 </html>`;
 
@@ -1572,6 +2035,7 @@ function renderAll(persist = true){
   setHint("borderAlphaLabel", `Alpha: ${state.borderAlpha.toFixed(2)}`);
   setHint("glowStrengthLabel", `Strength: ${state.glowStrength.toFixed(2)}`);
   setHint("containerWidthLabel", `${state.containerWidth}px`);
+  setHint("rightColumnMaxLabel", `${state.rightColumnMax}px`);
   setHint("panelGapLabel", `${state.panelGap}px`);
   setHint("cardPaddingLabel", `${state.cardPadding}px`);
   setHint("sectionSpacingLabel", `${state.sectionSpacing}px`);
@@ -1585,6 +2049,23 @@ function renderAll(persist = true){
   setHint("decorBorderRadiusLabel", `${state.decorBorderRadius}px`);
   setHint("commentsAlphaLabel", `Alpha: ${Number(state.commentsAlpha).toFixed(2)}`);
   setHint("commentPaddingLabel", `${Math.round(state.commentPadding)}px`);
+  setHint("orderTop8Label", `${Math.round(state.orderTop8)}`);
+  setHint("orderSocialLabel", `${Math.round(state.orderSocial)}`);
+  setHint("orderDetailsLabel", `${Math.round(state.orderDetails)}`);
+  setHint("orderSongLabel", `${Math.round(state.orderSong)}`);
+  setHint("orderCommentsLabel", `${Math.round(state.orderComments)}`);
+  setHint("leftColumnXLabel", `${Math.round(state.leftColumnX)}px`);
+  setHint("leftColumnYLabel", `${Math.round(state.leftColumnY)}px`);
+  setHint("rightColumnXLabel", `${Math.round(state.rightColumnX)}px`);
+  setHint("rightColumnYLabel", `${Math.round(state.rightColumnY)}px`);
+  setHint("top8XLabel", `${Math.round(state.top8X)}px`);
+  setHint("top8YLabel", `${Math.round(state.top8Y)}px`);
+  setHint("socialXLabel", `${Math.round(state.socialX)}px`);
+  setHint("socialYLabel", `${Math.round(state.socialY)}px`);
+  setHint("songXLabel", `${Math.round(state.songX)}px`);
+  setHint("songYLabel", `${Math.round(state.songY)}px`);
+  setHint("shapeChamferSizeLabel", `${Math.round(state.shapeChamferSize)}px`);
+  setHint("shapeBorderWidthLabel", `${Math.round(state.shapeBorderWidth)}px`);
   setHint("hoverScaleLabel", `${Number(state.hoverScale).toFixed(2)}x`);
   setHint("shadowStrengthLabel", `x${Number(state.shadowStrength).toFixed(2)}`);
   setHint("baseFontSizeLabel", `${state.baseFontSize}px`);
@@ -1592,6 +2073,10 @@ function renderAll(persist = true){
   setHint("headerFontSizeLabel", `${state.headerFontSize}px`);
   setHint("headerLinkSizeLabel", `${state.headerLinkSize}px`);
   setHint("linkWeightLabel", `${state.linkWeight}`);
+  setHint("taglineBoxAlphaLabel", `Alpha: ${Number(state.taglineBoxAlpha).toFixed(2)}`);
+  setHint("taglineBoxGlowLabel", `Glow: ${Number(state.taglineBoxGlow).toFixed(2)}`);
+  setHint("taglineBoxRadiusLabel", `${Math.round(state.taglineBoxRadius)}px`);
+  setHint("taglineBoxPaddingLabel", `${Math.round(state.taglineBoxPadding)}px`);
   setHint("buttonAlphaLabel", `Alpha: ${state.buttonAlpha.toFixed(2)}`);
   setHint("buttonHoverAlphaLabel", `Alpha: ${state.buttonHoverAlpha.toFixed(2)}`);
   setHint("topbarAlphaLabel", `Alpha: ${state.topbarAlpha.toFixed(2)}`);
@@ -1605,10 +2090,11 @@ function renderAll(persist = true){
   setHint("avatarGlowLabel", `Glow: ${Number(state.avatarGlow).toFixed(2)}`);
   setHint("nameGlowLabel", `Glow: ${Number(state.nameGlow).toFixed(2)}`);
 
-  const css = buildCss();
+  const css = buildSnippetCss();
   $("cssOut").value = css;
 
-  renderPreview();
+  renderPreview(css);
+  applyUiMode();
   if (persist) saveDraft();
 }
 
