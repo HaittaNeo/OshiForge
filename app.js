@@ -1472,14 +1472,14 @@ function buildCss(){
   }
 
   // Section links
-  css += `${selector} .section-links{background:${rgba("#0a0e16",sectionAlpha)} !important;border:1px solid ${rgba(primary,0.20)} !important;border-radius:14px !important;box-shadow:0 14px 34px rgba(0,0,0,0.55) !important;backdrop-filter:blur(${glassBlur}px);-webkit-backdrop-filter:blur(${glassBlur}px);overflow:hidden;}\n`;
+  css += `${selector} .section-links{background:${rgba(panelBaseColor,sectionAlpha)} !important;border:1px solid ${rgba(primary,0.20)} !important;border-radius:14px !important;box-shadow:0 14px 34px rgba(0,0,0,0.55) !important;backdrop-filter:blur(${glassBlur}px);-webkit-backdrop-filter:blur(${glassBlur}px);overflow:hidden;}\n`;
   css += `${selector} .section-links a{display:inline-block;padding:10px 12px;color:${rgba(text,0.90)} !important;border-right:1px solid rgba(255,255,255,0.07);}\n`;
   css += `${selector} .section-links a:last-child{border-right:none;}\n`;
-  css += `${selector} .section-links a:hover{background:${rgba("#101624",Math.min(0.98, sectionAlpha + 0.08))} !important;color:${primary} !important;text-shadow:0 0 14px ${rgba(primary,0.35)};}\n\n`;
+  css += `${selector} .section-links a:hover{background:${rgba(panelHoverBaseColor,Math.min(0.98, sectionAlpha + 0.08))} !important;color:${primary} !important;text-shadow:0 0 14px ${rgba(primary,0.35)};}\n\n`;
 
   // Social list items
-  css += `${selector} .social-links-list .social-link-item{background:${rgba("#101624",socialAlpha)} !important;border:1px solid ${rgba(primary,0.22)} !important;border-radius:12px !important;box-shadow:0 10px 24px rgba(0,0,0,0.55) !important;}\n`;
-  css += `${selector} .social-links-list .social-link-item:hover{background:${rgba("#1a2234",Math.min(0.98, socialAlpha + 0.08))} !important;border-color:${rgba(primary,0.55)} !important;box-shadow:0 14px 34px rgba(0,0,0,0.62), 0 0 28px ${rgba(primary,0.22)} !important;}\n`;
+  css += `${selector} .social-links-list .social-link-item{background:${rgba(panelBaseColor,socialAlpha)} !important;border:1px solid ${rgba(primary,0.22)} !important;border-radius:12px !important;box-shadow:0 10px 24px rgba(0,0,0,0.55) !important;}\n`;
+  css += `${selector} .social-links-list .social-link-item:hover{background:${rgba(panelHoverBaseColor,Math.min(0.98, socialAlpha + 0.08))} !important;border-color:${rgba(primary,0.55)} !important;box-shadow:0 14px 34px rgba(0,0,0,0.62), 0 0 28px ${rgba(primary,0.22)} !important;}\n`;
   css += `${selector} .social-links-list .social-link-item{display:inline-flex !important;align-items:center !important;justify-content:center !important;}\n`;
   css += `${selector} .social-links-list .social-link-platform, ${selector} .social-links-list .social-link-item, ${selector} .social-links-list .social-link-item *{color:${rgba(text,0.92)} !important;letter-spacing:0.6px;}\n`;
   css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n`;
@@ -1538,6 +1538,15 @@ function buildCss(){
   css += `  backdrop-filter: blur(${glassBlur}px) !important;\n`;
   css += `  -webkit-backdrop-filter: blur(${glassBlur}px) !important;\n`;
   css += `}\n`;
+  css += `${selector} .card-body,\n`;
+  css += `${selector} .panel-body,\n`;
+  css += `${selector} .module-body,\n`;
+  css += `${selector} .contentBox .content,\n`;
+  css += `${selector} .profile-main-card .card-body,\n`;
+  css += `${selector} .blurb-section{\n`;
+  css += `  background: transparent !important;\n`;
+  css += `  background-image: none !important;\n`;
+  css += `}\n`;
   css += `${selector} .card:hover,\n`;
   css += `${selector} [class*="card"]:hover,\n`;
   css += `${selector} .profile-info:hover,\n`;
@@ -1554,9 +1563,9 @@ function buildCss(){
   css += `  background-image: none !important;\n`;
   css += `}\n`;
   css += `${selector} .profile-top-bar{background:${rgba("#000000", topbarAlpha)} !important;backdrop-filter:blur(${glassBlurSoft}px) !important;-webkit-backdrop-filter:blur(${glassBlurSoft}px) !important;}\n`;
-  css += `${selector} .section-links{background:${rgba("#0a0e16", sectionAlpha)} !important;backdrop-filter:blur(${glassBlur}px) !important;-webkit-backdrop-filter:blur(${glassBlur}px) !important;}\n`;
-  css += `${selector} .social-links-list .social-link-item{background:${rgba("#101624", socialAlpha)} !important;}\n`;
-  css += `${selector} .social-links-list .social-link-item:hover{background:${rgba("#1a2234", Math.min(0.98, socialAlpha + 0.08))} !important;}\n`;
+  css += `${selector} .section-links{background:${rgba(panelBaseColor, sectionAlpha)} !important;backdrop-filter:blur(${glassBlur}px) !important;-webkit-backdrop-filter:blur(${glassBlur}px) !important;}\n`;
+  css += `${selector} .social-links-list .social-link-item{background:${rgba(panelBaseColor, socialAlpha)} !important;}\n`;
+  css += `${selector} .social-links-list .social-link-item:hover{background:${rgba(panelHoverBaseColor, Math.min(0.98, socialAlpha + 0.08))} !important;}\n`;
   css += `${selector} .profile-contact-links a.contact-link,\n`;
   css += `${selector} .profile-contact-links a.boop-link,\n`;
   css += `${selector} a.contact-link,\n`;
@@ -2096,10 +2105,11 @@ function renderAll(persist = true){
   setHint("avatarGlowLabel", `Glow: ${Number(state.avatarGlow).toFixed(2)}`);
   setHint("nameGlowLabel", `Glow: ${Number(state.nameGlow).toFixed(2)}`);
 
-  const css = buildSnippetCss();
-  $("cssOut").value = css;
+  const cssForOutput = buildSnippetCss();
+  const cssForPreview = buildCss();
+  $("cssOut").value = cssForOutput;
 
-  renderPreview(css);
+  renderPreview(cssForPreview);
   applyUiMode();
   if (persist) saveDraft();
 }
