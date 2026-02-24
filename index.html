@@ -40,10 +40,10 @@
     <section class="panel">
       <div class="tabs" role="tablist" aria-label="Editor Tabs">
         <button class="tabBtn active" data-tab="presets">Start Here</button>
-        <button class="tabBtn" data-tab="colors">Color Vibe</button>
+        <button class="tabBtn" data-tab="colors">Colors</button>
         <button class="tabBtn" data-tab="layout">Card Layout</button>
         <button class="tabBtn" data-tab="type">Text Style</button>
-        <button class="tabBtn" data-tab="glass">Glass FX</button>
+        <button class="tabBtn" data-tab="glass">Blur</button>
         <button class="tabBtn" data-tab="avatar">Avatar</button>
         <button class="tabBtn" data-tab="sections">Sections</button>
         <button class="tabBtn" data-tab="advanced">Power</button>
@@ -107,7 +107,7 @@
       </div>
 
       <div class="tabPanel" data-tab-panel="colors">
-        <h2>Color Vibe</h2>
+        <h2>Colors</h2>
         <div class="row three">
           <div><label>Primary</label><input id="cPrimary" type="color" /></div>
           <div><label>Secondary</label><input id="cSecondary" type="color" /></div>
@@ -121,7 +121,7 @@
           </div>
         </div>
         <div class="row two">
-          <div><label>Link hover</label><input id="linkHoverColor" type="color" /></div>
+          <div><label>Link hover color</label><input id="linkHoverColor" type="color" /></div>
           <div>
             <label>Link weight</label>
             <input id="linkWeight" type="range" min="400" max="900" step="100" />
@@ -130,6 +130,136 @@
         </div>
         <div class="row">
           <label><input id="linkUnderline" type="checkbox" /> Underline links</label>
+        </div>
+        <hr />
+        <h2>Header Colors</h2>
+        <div class="row three">
+          <div><label>Header gradient start</label><input id="headerGradStart" type="color" /></div>
+          <div><label>Header gradient middle</label><input id="headerGradMid" type="color" /></div>
+          <div><label>Header gradient end</label><input id="headerGradEnd" type="color" /></div>
+        </div>
+        <div class="row">
+          <div><label>Header text</label><input id="headerTextColor" type="color" /></div>
+        </div>
+        <hr />
+        <h2>Panels & Glass</h2>
+        <div class="row two">
+          <div><label>Panel base color</label><input id="panelBaseColor" type="color" /></div>
+          <div><label>Panel hover color</label><input id="panelHoverBaseColor" type="color" /></div>
+        </div>
+        <div class="row three">
+          <div>
+            <label>Panel opacity</label>
+            <input id="panelAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="panelAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Border opacity</label>
+            <input id="borderAlpha" type="range" min="0.05" max="0.9" step="0.01" />
+            <div class="hint" id="borderAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Top bar opacity</label>
+            <input id="topbarAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="topbarAlphaLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Section opacity</label>
+            <input id="sectionAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="sectionAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Social opacity</label>
+            <input id="socialAlpha" type="range" min="0.05" max="0.95" step="0.01" />
+            <div class="hint" id="socialAlphaLabel"></div>
+          </div>
+        </div>
+        <hr />
+        <h2>Buttons & Links</h2>
+        <div class="row three">
+          <div><label>Button background</label><input id="btnBg" type="color" /></div>
+          <div><label>Button text</label><input id="btnText" type="color" /></div>
+          <div><label>Button border</label><input id="btnBorder" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div><label>Hover background</label><input id="btnHoverBg" type="color" /></div>
+          <div><label>Hover text</label><input id="btnHoverText" type="color" /></div>
+        </div>
+        <div class="row two">
+          <div>
+            <label>Button opacity</label>
+            <input id="buttonAlpha" type="range" min="0.1" max="0.95" step="0.01" />
+            <div class="hint" id="buttonAlphaLabel"></div>
+          </div>
+          <div>
+            <label>Button hover opacity</label>
+            <input id="buttonHoverAlpha" type="range" min="0.1" max="0.98" step="0.01" />
+            <div class="hint" id="buttonHoverAlphaLabel"></div>
+          </div>
+        </div>
+        <hr />
+        <h2>Text & Content Colors</h2>
+        <div class="row three">
+          <div><label>Blurb title</label><input id="blurbTitleColor" type="color" /></div>
+          <div><label>Blurb text</label><input id="blurbTextColor" type="color" /></div>
+          <div><label>Custom HTML text</label><input id="customHtmlColor" type="color" /></div>
+        </div>
+        <div class="row three">
+          <div><label>Interests title</label><input id="interestTitleColor" type="color" /></div>
+          <div><label>Interests text</label><input id="interestTextColor" type="color" /></div>
+          <div><label>Tagline text</label><input id="taglineColor" type="color" /></div>
+        </div>
+        <div class="row three">
+          <div><label>About/body text</label><input id="aboutBodyColor" type="color" /></div>
+          <div><label>Name color</label><input id="nameColor" type="color" /></div>
+          <div><label>Reply/input border</label><input id="replyBorderColor" type="color" /></div>
+        </div>
+        <hr />
+        <h2>Tagline Box Colors</h2>
+        <div class="row three">
+          <div><label>Tagline box background</label><input id="taglineBoxBgColor" type="color" /></div>
+          <div><label>Tagline box border</label><input id="taglineBoxBorderColor" type="color" /></div>
+          <div>
+            <label>Tagline box opacity</label>
+            <input id="taglineBoxAlpha" type="range" min="0.1" max="1" step="0.01" />
+            <div class="hint" id="taglineBoxAlphaLabel"></div>
+          </div>
+        </div>
+        <hr />
+        <h2>Mood / Activity Bar Colors</h2>
+        <div class="row three">
+          <div><label>Status bar background</label><input id="moodBgColor" type="color" /></div>
+          <div><label>Bar text</label><input id="moodTextColor" type="color" /></div>
+          <div><label>Bar border</label><input id="moodBorderColor" type="color" /></div>
+        </div>
+        <hr />
+        <h2>Comments & Replies Colors</h2>
+        <div class="row three">
+          <div><label>Comments background</label><input id="commentsBg" type="color" /></div>
+          <div><label>Comments text</label><input id="commentsTextColor" type="color" /></div>
+          <div><label>Comments border</label><input id="commentsBorderColor" type="color" /></div>
+        </div>
+        <div class="row three">
+          <div><label>Reply box background</label><input id="replyBg" type="color" /></div>
+          <div><label>Reply/editor text</label><input id="replyTextColor" type="color" /></div>
+          <div>
+            <label>Comment opacity</label>
+            <input id="commentsAlpha" type="range" min="0.1" max="1" step="0.01" />
+            <div class="hint" id="commentsAlphaLabel"></div>
+          </div>
+        </div>
+        <hr />
+        <h2>Decorative Border Colors</h2>
+        <div class="row three">
+          <div><label>Border color</label><input id="decorBorderColor" type="color" /></div>
+          <div><label>Border secondary color</label><input id="decorBorderAltColor" type="color" /></div>
+          <div>
+            <label>Border opacity</label>
+            <input id="decorBorderAlpha" type="range" min="0.1" max="1" step="0.01" />
+            <div class="hint" id="decorBorderAlphaLabel"></div>
+          </div>
         </div>
       </div>
 
@@ -257,7 +387,7 @@
         </div>
         <div class="row three">
           <div>
-            <label>Decor style</label>
+            <label>Border style</label>
             <select id="decorBorderStyle">
               <option value="solid">solid</option>
               <option value="double">double</option>
@@ -266,29 +396,20 @@
             </select>
           </div>
           <div>
-            <label>Decor width</label>
+            <label>Border width</label>
             <input id="decorBorderWidth" type="range" min="1" max="12" step="1" />
             <div class="hint" id="decorBorderWidthLabel"></div>
           </div>
-          <div>
-            <label>Decor opacity</label>
-            <input id="decorBorderAlpha" type="range" min="0.1" max="1" step="0.01" />
-            <div class="hint" id="decorBorderAlphaLabel"></div>
-          </div>
-        </div>
-        <div class="row three">
-          <div><label>Decor color</label><input id="decorBorderColor" type="color" /></div>
-          <div><label>Decor alt color</label><input id="decorBorderAltColor" type="color" /></div>
           <div><label><input id="decorBorderGradient" type="checkbox" /> Gradient border</label></div>
         </div>
         <div class="row two">
           <div>
-            <label>Decor glow</label>
+            <label>Border glow</label>
             <input id="decorBorderGlow" type="range" min="0" max="1" step="0.01" />
             <div class="hint" id="decorBorderGlowLabel"></div>
           </div>
           <div>
-            <label>Decor radius</label>
+            <label>Border corner radius</label>
             <input id="decorBorderRadius" type="range" min="0" max="40" step="1" />
             <div class="hint" id="decorBorderRadiusLabel"></div>
           </div>
@@ -368,11 +489,6 @@
             <div class="hint" id="headerLinkSizeLabel"></div>
           </div>
         </div>
-        <div class="row three">
-          <div><label>Header grad 1</label><input id="headerGradStart" type="color" /></div>
-          <div><label>Header grad 2</label><input id="headerGradMid" type="color" /></div>
-          <div><label>Header grad 3</label><input id="headerGradEnd" type="color" /></div>
-        </div>
         <div class="row two">
           <div><label>Star icon</label><input id="starIcon" type="text" placeholder="e.g. ⭐" /></div>
           <div><label>Heart icon</label><input id="heartIcon" type="text" placeholder="e.g. 💚" /></div>
@@ -384,45 +500,10 @@
 
       <div class="tabPanel" data-tab-panel="glass">
         <h2>Transparency & Blur</h2>
-        <div class="row two">
-          <div><label>Panel base color</label><input id="panelBaseColor" type="color" /></div>
-          <div><label>Panel hover color</label><input id="panelHoverBaseColor" type="color" /></div>
-        </div>
-        <div class="row two">
-          <div>
-            <label>Panel alpha</label>
-            <input id="panelAlpha" type="range" min="0.05" max="0.95" step="0.01" />
-            <div class="hint" id="panelAlphaLabel"></div>
-          </div>
-          <div>
-            <label>Border alpha</label>
-            <input id="borderAlpha" type="range" min="0.05" max="0.9" step="0.01" />
-            <div class="hint" id="borderAlphaLabel"></div>
-          </div>
-        </div>
-        <div class="row two">
-          <div>
-            <label>Top bar alpha</label>
-            <input id="topbarAlpha" type="range" min="0.05" max="0.95" step="0.01" />
-            <div class="hint" id="topbarAlphaLabel"></div>
-          </div>
-          <div>
-            <label>Section alpha</label>
-            <input id="sectionAlpha" type="range" min="0.05" max="0.95" step="0.01" />
-            <div class="hint" id="sectionAlphaLabel"></div>
-          </div>
-        </div>
-        <div class="row two">
-          <div>
-            <label>Social alpha</label>
-            <input id="socialAlpha" type="range" min="0.05" max="0.95" step="0.01" />
-            <div class="hint" id="socialAlphaLabel"></div>
-          </div>
-          <div>
-            <label>Glass blur</label>
-            <input id="glassBlur" type="range" min="0" max="24" step="1" />
-            <div class="hint" id="glassBlurLabel"></div>
-          </div>
+        <div class="row">
+          <label>Glass blur</label>
+          <input id="glassBlur" type="range" min="0" max="24" step="1" />
+          <div class="hint" id="glassBlurLabel"></div>
         </div>
       </div>
 
@@ -449,16 +530,10 @@
           <input id="avatarGlow" type="range" min="0" max="2" step="0.01" />
           <div class="hint" id="avatarGlowLabel"></div>
         </div>
-        <div class="row two">
-          <div>
-            <label>Name color</label>
-            <input id="nameColor" type="color" />
-          </div>
-          <div>
-            <label>Name glow</label>
-            <input id="nameGlow" type="range" min="0" max="2" step="0.01" />
-            <div class="hint" id="nameGlowLabel"></div>
-          </div>
+        <div class="row">
+          <label>Name glow</label>
+          <input id="nameGlow" type="range" min="0" max="2" step="0.01" />
+          <div class="hint" id="nameGlowLabel"></div>
         </div>
         <div class="row">
           <label>Custom avatar shape CSS</label>
@@ -471,50 +546,10 @@
         <div class="row">
           <label><input id="uniformLinks" type="checkbox" /> Keep contact/boop styles uniform</label>
         </div>
-        <div class="row three">
-          <div><label>Button bg</label><input id="btnBg" type="color" /></div>
-          <div><label>Button text</label><input id="btnText" type="color" /></div>
-          <div><label>Button border</label><input id="btnBorder" type="color" /></div>
-        </div>
-        <div class="row two">
-          <div><label>Hover bg</label><input id="btnHoverBg" type="color" /></div>
-          <div><label>Hover text</label><input id="btnHoverText" type="color" /></div>
-        </div>
-        <div class="row two">
-          <div>
-            <label>Button alpha</label>
-            <input id="buttonAlpha" type="range" min="0.1" max="0.95" step="0.01" />
-            <div class="hint" id="buttonAlphaLabel"></div>
-          </div>
-          <div>
-            <label>Button hover alpha</label>
-            <input id="buttonHoverAlpha" type="range" min="0.1" max="0.98" step="0.01" />
-            <div class="hint" id="buttonHoverAlphaLabel"></div>
-          </div>
-        </div>
         <hr />
         <h2>About, Blurbs & Interests</h2>
-        <div class="row three">
-          <div><label>Blurb title</label><input id="blurbTitleColor" type="color" /></div>
-          <div><label>Blurb text</label><input id="blurbTextColor" type="color" /></div>
-          <div><label>Custom HTML text</label><input id="customHtmlColor" type="color" /></div>
-        </div>
-        <div class="row three">
-          <div><label>Interests title</label><input id="interestTitleColor" type="color" /></div>
-          <div><label>Interests text</label><input id="interestTextColor" type="color" /></div>
-          <div><label>Tagline text</label><input id="taglineColor" type="color" /></div>
-        </div>
         <div class="row">
           <label><input id="taglineBoxEnabled" type="checkbox" /> Enable tagline box glow (for the quote box under username)</label>
-        </div>
-        <div class="row three">
-          <div><label>Tagline box bg</label><input id="taglineBoxBgColor" type="color" /></div>
-          <div><label>Tagline box border</label><input id="taglineBoxBorderColor" type="color" /></div>
-          <div>
-            <label>Tagline box alpha</label>
-            <input id="taglineBoxAlpha" type="range" min="0.1" max="1" step="0.01" />
-            <div class="hint" id="taglineBoxAlphaLabel"></div>
-          </div>
         </div>
         <div class="row three">
           <div>
@@ -533,10 +568,6 @@
             <div class="hint" id="taglineBoxPaddingLabel"></div>
           </div>
         </div>
-        <div class="row two">
-          <div><label>About/body text</label><input id="aboutBodyColor" type="color" /></div>
-          <div><label>Header text</label><input id="headerTextColor" type="color" /></div>
-        </div>
         <div class="row">
           <label><input id="forceReadableText" type="checkbox" /> Force readable text in blurbs/interests/about</label>
           <div class="hint">Tip: turn this on if text shows up gray/dark on your profile.</div>
@@ -545,37 +576,12 @@
           <label><input id="preserveLineBreaks" type="checkbox" /> Preserve line breaks in blurbs/custom text</label>
         </div>
         <hr />
-        <h2>Mood / Activity Bar</h2>
-        <div class="row three">
-          <div><label>Bar bg</label><input id="moodBgColor" type="color" /></div>
-          <div><label>Bar text</label><input id="moodTextColor" type="color" /></div>
-          <div><label>Bar border</label><input id="moodBorderColor" type="color" /></div>
-        </div>
-        <hr />
         <h2>Comments & Replies</h2>
-        <div class="row three">
-          <div><label>Comments bg</label><input id="commentsBg" type="color" /></div>
-          <div><label>Comments text</label><input id="commentsTextColor" type="color" /></div>
-          <div><label>Comments border</label><input id="commentsBorderColor" type="color" /></div>
-        </div>
-        <div class="row three">
-          <div><label>Reply/editor bg</label><input id="replyBg" type="color" /></div>
-          <div><label>Reply/editor text</label><input id="replyTextColor" type="color" /></div>
-          <div>
-            <label>Comment alpha</label>
-            <input id="commentsAlpha" type="range" min="0.1" max="1" step="0.01" />
-            <div class="hint" id="commentsAlphaLabel"></div>
-          </div>
-        </div>
         <div class="row two">
           <div>
             <label>Comment content padding</label>
             <input id="commentPadding" type="range" min="0" max="26" step="1" />
             <div class="hint" id="commentPaddingLabel"></div>
-          </div>
-          <div>
-            <label>Reply/input border</label>
-            <input id="replyBorderColor" type="color" />
           </div>
         </div>
         <div class="row">

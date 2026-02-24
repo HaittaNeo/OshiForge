@@ -1359,9 +1359,16 @@ function buildCss(){
   css += `}\n`;
   css += `${selector} .card:hover{transform:translateY(-${lift}px) scale(${hoverScale});border-color:${rgba(primary,0.45)};box-shadow: var(--of-shadow), var(--of-glow-strong);}\n\n`;
 
-  // Card header accent
-  css += `${selector} .card-header{\n`;
+  // Card/panel header accent
+  css += `${selector} .card-header,\n`;
+  css += `${selector} .panel .panel-heading,\n`;
+  css += `${selector} .panel-heading,\n`;
+  css += `${selector} .sectionHeader,\n`;
+  css += `${selector} .profileSection h3,\n`;
+  css += `${selector} .contentBox .title,\n`;
+  css += `${selector} .module .title{\n`;
   css += `  background: linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;\n`;
+  css += `  background-image: linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;\n`;
   css += `  border-bottom: 1px solid rgba(255,255,255,0.08);\n`;
   css += `  color: ${headerTextColor} !important;\n`;
   css += `  letter-spacing: 1.3px;\n`;
@@ -1644,8 +1651,14 @@ function buildCss(){
   css += `${selector} .card-header.hearted::before{background:none !important;background-image:none !important;filter:none !important;display:inline-block !important;position:static !important;width:auto !important;height:auto !important;left:auto !important;top:auto !important;transform:none !important;margin-right:8px !important;}\n`;
   css += `${selector} .card-header.starred::before{content:"${starIcon}" !important;}\n`;
   css += `${selector} .card-header.hearted::before{content:"${heartIcon}" !important;}\n`;
-  css += `${selector} .card-header{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;}\n`;
-  css += `${selector} .card-header, ${selector} .card-header *{color:${headerTextColor} !important;}\n`;
+  css += `${selector} .card-header,\n`;
+  css += `${selector} .panel .panel-heading,\n`;
+  css += `${selector} .panel-heading,\n`;
+  css += `${selector} .sectionHeader,\n`;
+  css += `${selector} .profileSection h3,\n`;
+  css += `${selector} .contentBox .title,\n`;
+  css += `${selector} .module .title{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;background-image:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;}\n`;
+  css += `${selector} .card-header, ${selector} .card-header *, ${selector} .panel .panel-heading, ${selector} .panel .panel-heading *, ${selector} .panel-heading, ${selector} .panel-heading *, ${selector} .sectionHeader, ${selector} .sectionHeader *, ${selector} .profileSection h3, ${selector} .profileSection h3 *, ${selector} .contentBox .title, ${selector} .contentBox .title *, ${selector} .module .title, ${selector} .module .title *{color:${headerTextColor} !important;}\n`;
   if (fixHeaderStyle){
     css += `${selector} .panel .panel-heading, ${selector} .card-header, ${selector} .sectionHeader, ${selector} .profileSection h3, ${selector} .panel-heading, ${selector} .contentBox .title, ${selector} .module .title{background:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;color:${headerTextColor} !important;background-image:linear-gradient(90deg, ${headerGradStart}, ${headerGradMid}, ${headerGradEnd}) !important;}\n`;
   }
@@ -2048,8 +2061,8 @@ function renderPreview(css){
 
 function renderAll(persist = true){
   // labels
-  setHint("panelAlphaLabel", `Alpha: ${state.panelAlpha.toFixed(2)}`);
-  setHint("borderAlphaLabel", `Alpha: ${state.borderAlpha.toFixed(2)}`);
+  setHint("panelAlphaLabel", `Opacity: ${state.panelAlpha.toFixed(2)}`);
+  setHint("borderAlphaLabel", `Opacity: ${state.borderAlpha.toFixed(2)}`);
   setHint("glowStrengthLabel", `Strength: ${state.glowStrength.toFixed(2)}`);
   setHint("containerWidthLabel", `${state.containerWidth}px`);
   setHint("rightColumnMaxLabel", `${state.rightColumnMax}px`);
@@ -2061,10 +2074,10 @@ function renderAll(persist = true){
   setHint("frameWidthLabel", `${state.frameWidth}px`);
   setHint("frameRadiusLabel", `${state.frameRadius}px`);
   setHint("decorBorderWidthLabel", `${state.decorBorderWidth}px`);
-  setHint("decorBorderAlphaLabel", `Alpha: ${Number(state.decorBorderAlpha).toFixed(2)}`);
+  setHint("decorBorderAlphaLabel", `Opacity: ${Number(state.decorBorderAlpha).toFixed(2)}`);
   setHint("decorBorderGlowLabel", `Glow: ${Number(state.decorBorderGlow).toFixed(2)}`);
   setHint("decorBorderRadiusLabel", `${state.decorBorderRadius}px`);
-  setHint("commentsAlphaLabel", `Alpha: ${Number(state.commentsAlpha).toFixed(2)}`);
+  setHint("commentsAlphaLabel", `Opacity: ${Number(state.commentsAlpha).toFixed(2)}`);
   setHint("commentPaddingLabel", `${Math.round(state.commentPadding)}px`);
   setHint("orderTop8Label", `${Math.round(state.orderTop8)}`);
   setHint("orderSocialLabel", `${Math.round(state.orderSocial)}`);
@@ -2090,15 +2103,15 @@ function renderAll(persist = true){
   setHint("headerFontSizeLabel", `${state.headerFontSize}px`);
   setHint("headerLinkSizeLabel", `${state.headerLinkSize}px`);
   setHint("linkWeightLabel", `${state.linkWeight}`);
-  setHint("taglineBoxAlphaLabel", `Alpha: ${Number(state.taglineBoxAlpha).toFixed(2)}`);
+  setHint("taglineBoxAlphaLabel", `Opacity: ${Number(state.taglineBoxAlpha).toFixed(2)}`);
   setHint("taglineBoxGlowLabel", `Glow: ${Number(state.taglineBoxGlow).toFixed(2)}`);
   setHint("taglineBoxRadiusLabel", `${Math.round(state.taglineBoxRadius)}px`);
   setHint("taglineBoxPaddingLabel", `${Math.round(state.taglineBoxPadding)}px`);
-  setHint("buttonAlphaLabel", `Alpha: ${state.buttonAlpha.toFixed(2)}`);
-  setHint("buttonHoverAlphaLabel", `Alpha: ${state.buttonHoverAlpha.toFixed(2)}`);
-  setHint("topbarAlphaLabel", `Alpha: ${state.topbarAlpha.toFixed(2)}`);
-  setHint("sectionAlphaLabel", `Alpha: ${state.sectionAlpha.toFixed(2)}`);
-  setHint("socialAlphaLabel", `Alpha: ${state.socialAlpha.toFixed(2)}`);
+  setHint("buttonAlphaLabel", `Opacity: ${state.buttonAlpha.toFixed(2)}`);
+  setHint("buttonHoverAlphaLabel", `Opacity: ${state.buttonHoverAlpha.toFixed(2)}`);
+  setHint("topbarAlphaLabel", `Opacity: ${state.topbarAlpha.toFixed(2)}`);
+  setHint("sectionAlphaLabel", `Opacity: ${state.sectionAlpha.toFixed(2)}`);
+  setHint("socialAlphaLabel", `Opacity: ${state.socialAlpha.toFixed(2)}`);
   setHint("glassBlurLabel", `${Math.round(state.glassBlur)}px blur`);
   setHint("cardRadiusLabel", `${state.cardRadius}px`);
   setHint("hoverLiftLabel", `${state.hoverLift}px`);
