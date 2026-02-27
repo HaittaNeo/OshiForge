@@ -1508,9 +1508,8 @@ function buildCss(){
     css += `${avatarBoxSelector}{border-radius:${geo.radius} !important;clip-path:none !important;-webkit-clip-path:none !important;overflow:hidden !important;}\n\n`;
   }
   if (avatarLogoEnabled){
-    css += `${selector} .profile-main-card .card-body{position:relative !important;}\n`;
-    css += `${selector} .profile-main-card .card-body::after{content:"";display:block;position:absolute;left:50%;top:calc(${avatarSize}px + ${avatarLogoOffsetY}px);transform:translateX(-50%);width:${avatarLogoWidth}px;height:${avatarLogoHeight}px;background-image:${avatarLogoImage};background-size:contain;background-repeat:no-repeat;background-position:center;opacity:${avatarLogoOpacity};pointer-events:none;z-index:6 !important;}\n`;
-    css += `${selector} .of-profile-logo{display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;object-fit:contain !important;opacity:${avatarLogoOpacity} !important;margin:${avatarLogoOffsetY}px auto 0 !important;pointer-events:none !important;position:relative !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;}\n\n`;
+    css += `${selector} .profile-display-name{position:relative !important;}\n`;
+    css += `${selector} .profile-display-name::before{content:"";display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(${avatarLogoOffsetY}px) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;}\n\n`;
   }
 
   // Buttons/links (contact + boop)
@@ -1886,13 +1885,6 @@ function buildSnippetCss(){
 
 function renderPreview(css){
   const previewCss = css || buildCss();
-  const avatarLogoEnabled = Boolean(state.avatarLogoEnabled && String(state.avatarLogoUrl || "").trim());
-  const avatarLogoHtml = avatarLogoEnabled
-    ? `<img class="of-profile-logo" src="${String(state.avatarLogoUrl || "").replace(/"/g, "&quot;")}" alt="profile logo" />`
-    : "";
-  const previewLogoSuppressCss = avatarLogoEnabled
-    ? `.profile-custom-css .profile-main-card .card-body::after, .profile-page.profile-custom-css .profile-main-card .card-body::after{content:none !important;display:none !important;width:0 !important;height:0 !important;opacity:0 !important;background-image:none !important;}`
-    : "";
 
   // Starter markup modeled after HaittaNEO's MyOshi profile layout
   const doc = `
@@ -1986,7 +1978,6 @@ function renderPreview(css){
     line-height:1.4;
     outline:none;
   }
-  ${previewLogoSuppressCss}
 </style>
 </head>
 <body>
@@ -2007,8 +1998,6 @@ function renderPreview(css){
                   src="https://myoshi.jinxxy-cdn.com/avatars/user_01kj21f4b6fzxsgz6xxpky3tya/11a59534-cfce-40c9-8c63-835b38c4015b.png?width=200&height=200"
                   alt="avatar"
                   style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover" />
-            ${avatarLogoHtml}
-
              <div class="profile-display-name">~.::HaittaNEO::.~</div>
             <div class="profile-username">@haittaneo</div>
             <div class="profile-tagline">"Full stack do it from the front and the backend"</div>
