@@ -1890,6 +1890,9 @@ function renderPreview(css){
   const avatarLogoHtml = avatarLogoEnabled
     ? `<img class="of-avatar-logo" src="${String(state.avatarLogoUrl || "").replace(/"/g, "&quot;")}" alt="profile logo" />`
     : "";
+  const previewLogoSuppressCss = avatarLogoEnabled
+    ? `.profile-custom-css .profile-main-card .card-body::after, .profile-page.profile-custom-css .profile-main-card .card-body::after{content:none !important;display:none !important;width:0 !important;height:0 !important;opacity:0 !important;background-image:none !important;}`
+    : "";
 
   // Starter markup modeled after HaittaNEO's MyOshi profile layout
   const doc = `
@@ -1983,6 +1986,7 @@ function renderPreview(css){
     line-height:1.4;
     outline:none;
   }
+  ${previewLogoSuppressCss}
 </style>
 </head>
 <body>
