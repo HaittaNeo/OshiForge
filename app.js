@@ -1509,7 +1509,8 @@ function buildCss(){
   }
   if (avatarLogoEnabled){
     css += `${selector} .profile-main-card .card-body{position:relative !important;}\n`;
-    css += `${selector} .profile-main-card .card-body::after{content:"";position:absolute;left:50%;top:calc(${avatarSize}px + ${avatarLogoOffsetY}px);transform:translateX(-50%);width:${avatarLogoWidth}px;height:${avatarLogoHeight}px;background-image:${avatarLogoImage};background-size:contain;background-repeat:no-repeat;background-position:center;opacity:${avatarLogoOpacity};pointer-events:none;z-index:6 !important;}\n\n`;
+    css += `${selector} .profile-main-card .card-body::after{content:"";display:block;position:absolute;left:50%;top:calc(${avatarSize}px + ${avatarLogoOffsetY}px);transform:translateX(-50%);width:${avatarLogoWidth}px;height:${avatarLogoHeight}px;background-image:${avatarLogoImage};background-size:contain;background-repeat:no-repeat;background-position:center;opacity:${avatarLogoOpacity};pointer-events:none;z-index:6 !important;}\n`;
+    css += `${selector} .of-avatar-logo{display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;object-fit:contain !important;opacity:${avatarLogoOpacity} !important;margin:${avatarLogoOffsetY}px auto 0 !important;pointer-events:none !important;position:relative !important;z-index:6 !important;}\n\n`;
   }
 
   // Buttons/links (contact + boop)
@@ -1885,6 +1886,10 @@ function buildSnippetCss(){
 
 function renderPreview(css){
   const previewCss = css || buildCss();
+  const avatarLogoEnabled = Boolean(state.avatarLogoEnabled && String(state.avatarLogoUrl || "").trim());
+  const avatarLogoHtml = avatarLogoEnabled
+    ? `<img class="of-avatar-logo" src="${String(state.avatarLogoUrl || "").replace(/"/g, "&quot;")}" alt="profile logo" />`
+    : "";
 
   // Starter markup modeled after HaittaNEO's MyOshi profile layout
   const doc = `
@@ -1994,12 +1999,13 @@ function renderPreview(css){
         <div class="card profile-main-card">
           <div class="card-header starred"><span>~.::HaittaNEO::.~</span><a href="https://myoshi.co/haittaneo" target="_blank" rel="noopener noreferrer">Visit</a></div>
           <div class="card-body">
-            <img class="user-avatar profile-avatar"
-                 src="https://myoshi.jinxxy-cdn.com/avatars/user_01kj21f4b6fzxsgz6xxpky3tya/11a59534-cfce-40c9-8c63-835b38c4015b.png?width=200&height=200"
-                 alt="avatar"
-                 style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover" />
+             <img class="user-avatar profile-avatar"
+                  src="https://myoshi.jinxxy-cdn.com/avatars/user_01kj21f4b6fzxsgz6xxpky3tya/11a59534-cfce-40c9-8c63-835b38c4015b.png?width=200&height=200"
+                  alt="avatar"
+                  style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover" />
+            ${avatarLogoHtml}
 
-            <div class="profile-display-name">~.::HaittaNEO::.~</div>
+             <div class="profile-display-name">~.::HaittaNEO::.~</div>
             <div class="profile-username">@haittaneo</div>
             <div class="profile-tagline">"Full stack do it from the front and the backend"</div>
             <div class="profile-oshi-mark">DEV / VTUBER</div>
