@@ -668,7 +668,7 @@
         </div>
         <div class="row">
           <label>Extra custom CSS (appended last)</label>
-          <textarea id="extraCss" rows="8" placeholder=".profile-page.profile-custom-css .card { ... }"></textarea>
+          <textarea id="extraCss" rows="8" placeholder=".card { ... }"></textarea>
         </div>
       </div>
     </section>
@@ -683,8 +683,9 @@
       <div class="row">
         <textarea id="cssOut" rows="18" spellcheck="false"></textarea>
         <div class="hint">
-          Copy/paste this into your MyOshi custom CSS box. (We scope everything to <code>.profile-page.profile-custom-css</code>.)
+          Copy/paste this into your MyOshi custom CSS box. MyOshi auto-scopes your CSS to your profile.
         </div>
+        <div class="hint" id="importWarn"></div>
       </div>
     </section>
   </main>

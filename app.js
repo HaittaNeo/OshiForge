@@ -1,5 +1,5 @@
 ﻿// OshiForge - static GitHub Pages app
-// Generates scoped CSS for: .profile-page.profile-custom-css
+// Generates CSS for MyOshi profile custom CSS
 
 const SHAPES = [
   { value: "square",  label: "Square" },
@@ -759,6 +759,45 @@ function cssContentString(value){
     .replace(/\\/g, "\\\\")
     .replace(/"/g, '\\"')
     .replace(/\r?\n/g, " ");
+}
+
+function normalizeLegacyScope(css){
+  // MyOshi now auto-scopes profile CSS. Keep compatibility by reducing old
+  // root selector to .profile-custom-css instead of hard-requiring .profile-page.
+  return String(css || "").replace(/\.profile-page\.profile-custom-css/g, ".profile-custom-css");
+}
+
+function getDisallowedImports(css){
+  const allowedHosts = [
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+    "fonts.bunny.net",
+    "use.typekit.net",
+    "cdnjs.cloudflare.com",
+  ];
+  const bad = [];
+  const re = /@import\s+(?:url\(\s*)?['"]?([^'")\s;]+)['"]?\s*\)?/gi;
+  let m;
+  while ((m = re.exec(String(css || ""))) !== null){
+    const raw = String(m[1] || "").trim();
+    if (!raw) continue;
+    if (/^data:/i.test(raw)) continue;
+    let parsed;
+    try{
+      parsed = new URL(raw);
+    }catch{
+      bad.push(raw);
+      continue;
+    }
+    if (parsed.protocol !== "https:"){
+      bad.push(raw);
+      continue;
+    }
+    const host = parsed.hostname.toLowerCase();
+    const ok = allowedHosts.some((h) => host === h || host.endsWith(`.${h}`));
+    if (!ok) bad.push(raw);
+  }
+  return Array.from(new Set(bad));
 }
 
 function setHint(id, text){ $(id).textContent = text; }
@@ -1712,7 +1751,7 @@ function buildCss(){
     css += `\n${state.extraCss.trim()}\n`;
   }
 
-  return css;
+  return normalizeLegacyScope(css);
 }
 
 function buildSnippetCss(){
@@ -1818,7 +1857,7 @@ function buildSnippetCss(){
     css += `${selector} .profile-tagline:hover{border-color:${rgba(taglineBoxBorderColor,0.85)} !important;box-shadow:0 0 ${Math.round(24 + (36 * taglineBoxGlow))}px ${rgba(taglineBoxBorderColor,0.16 + 0.28 * taglineBoxGlow)},0 0 ${Math.round(60 + (78 * taglineBoxGlow))}px ${rgba(secondary,0.1 + 0.2 * taglineBoxGlow)} !important;}\n\n`;
   }
 
-  return css;
+  return normalizeLegacyScope(css);
 }
 
 function renderPreview(css){
@@ -2123,6 +2162,10 @@ function renderAll(persist = true){
   const cssForOutput = buildSnippetCss();
   const cssForPreview = buildCss();
   $("cssOut").value = cssForOutput;
+  const blockedImports = getDisallowedImports(cssForOutput);
+  setHint("importWarn", blockedImports.length
+    ? `Import warning: MyOshi only allows font hosts in @import. Check: ${blockedImports.join(", ")}`
+    : "");
 
   renderPreview(cssForPreview);
   applyUiMode();
