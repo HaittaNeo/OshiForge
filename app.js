@@ -823,7 +823,35 @@ function getDisallowedImports(css){
   return Array.from(new Set(bad));
 }
 
-function setHint(id, text){ $(id).textContent = text; }
+function setHint(id, text){
+  const el = $(id);
+  if (!el) return;
+  el.textContent = text;
+}
+
+function buildAvatarLogoCss(selector, opts){
+  if (!opts.enabled) return "";
+  const glowA = clamp(0.12 + (0.24 * opts.glowStrength), 0, 1);
+  const glowB = clamp(0.06 + (0.2 * opts.glowStrength), 0, 1);
+  const glowPxA = Math.round(opts.glowBlur);
+  const glowPxB = Math.round(opts.glowBlur * 2.1);
+  const baseFilter = opts.glowBlur > 0 || opts.glowStrength > 0
+    ? `drop-shadow(0 0 ${glowPxA}px ${rgba(opts.glowColor, glowA)}) drop-shadow(0 0 ${glowPxB}px ${rgba(opts.glowColor, glowB)})`
+    : "none";
+  let css = "";
+  css += `${selector} .profile-display-name{position:relative !important;}\n`;
+  css += `${selector} .profile-display-name::before{content:"";--of-logo-offset:${opts.offsetY}px;display:block !important;width:${opts.width}px !important;height:${opts.height}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(var(--of-logo-offset)) scale(1) !important;background-image:${opts.image} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${opts.opacity} !important;filter:${baseFilter} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;transition:transform 180ms ease, filter 180ms ease, opacity 180ms ease !important;}\n`;
+  if (opts.hoverGlow){
+    const hoverGlowA = clamp(glowA * 1.35, 0, 1);
+    const hoverGlowB = clamp(glowB * 1.35, 0, 1);
+    css += `${selector} .profile-display-name:hover::before{filter:drop-shadow(0 0 ${Math.round(glowPxA * 1.25)}px ${rgba(opts.glowColor, hoverGlowA)}) drop-shadow(0 0 ${Math.round(glowPxB * 1.3)}px ${rgba(opts.glowColor, hoverGlowB)}) !important;transform:translateY(var(--of-logo-offset)) scale(1.04) !important;}\n`;
+  }
+  if (opts.pulse){
+    css += `@keyframes ofLogoPulse{0%,100%{transform:translateY(var(--of-logo-offset)) scale(1);}50%{transform:translateY(calc(var(--of-logo-offset) - 3px)) scale(1.035);}}\n`;
+    css += `${selector} .profile-display-name::before{animation:ofLogoPulse 2.8s ease-in-out infinite !important;}\n`;
+  }
+  return `${css}\n`;
+}
 
 function flashButton(id, text, fallback, ms = 900){
   const el = $(id);
@@ -1025,7 +1053,6 @@ function initUI(){
 
   const presetSel = $("presetSelect");
   presetSel.innerHTML = PRESETS.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
-  presetSel.addEventListener("input", () => applyPresetById(presetSel.value));
   presetSel.addEventListener("change", () => applyPresetById(presetSel.value));
 
   if (!loadDraft(true)){
@@ -1036,13 +1063,15 @@ function initUI(){
   syncUIFromState();
   for (const [id, prop, key] of BINDINGS){
     const el = $(id);
+    if (!el) continue;
     const onChange = () => {
       const v = (prop === "checked") ? el.checked : el[prop];
       state[key] = (typeof DEFAULTS[key] === "number") ? Number(v) : v;
       renderAll();
     };
-    el.addEventListener("input", onChange);
-    el.addEventListener("change", onChange);
+    const tag = (el.tagName || "").toLowerCase();
+    const eventName = (prop === "checked" || tag === "select") ? "change" : "input";
+    el.addEventListener(eventName, onChange);
   }
 
   $("btnReset").addEventListener("click", () => {
@@ -1522,27 +1551,19 @@ function buildCss(){
   } else {
     css += `${avatarBoxSelector}{border-radius:${geo.radius} !important;clip-path:none !important;-webkit-clip-path:none !important;overflow:hidden !important;}\n\n`;
   }
-  if (avatarLogoEnabled){
-    const logoGlowA = clamp(0.12 + (0.24 * avatarLogoGlowStrength), 0, 1);
-    const logoGlowB = clamp(0.06 + (0.2 * avatarLogoGlowStrength), 0, 1);
-    const logoGlowPxA = Math.round(avatarLogoGlowBlur);
-    const logoGlowPxB = Math.round(avatarLogoGlowBlur * 2.1);
-    const baseFilter = avatarLogoGlowBlur > 0 || avatarLogoGlowStrength > 0
-      ? `drop-shadow(0 0 ${logoGlowPxA}px ${rgba(avatarLogoGlowColor, logoGlowA)}) drop-shadow(0 0 ${logoGlowPxB}px ${rgba(avatarLogoGlowColor, logoGlowB)})`
-      : "none";
-    css += `${selector} .profile-display-name{position:relative !important;}\n`;
-    css += `${selector} .profile-display-name::before{content:"";--of-logo-offset:${avatarLogoOffsetY}px;display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(var(--of-logo-offset)) scale(1) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;filter:${baseFilter} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;transition:transform 180ms ease, filter 180ms ease, opacity 180ms ease !important;}\n`;
-    if (avatarLogoHoverGlow){
-      const hoverGlowA = clamp(logoGlowA * 1.35, 0, 1);
-      const hoverGlowB = clamp(logoGlowB * 1.35, 0, 1);
-      css += `${selector} .profile-display-name:hover::before{filter:drop-shadow(0 0 ${Math.round(logoGlowPxA * 1.25)}px ${rgba(avatarLogoGlowColor, hoverGlowA)}) drop-shadow(0 0 ${Math.round(logoGlowPxB * 1.3)}px ${rgba(avatarLogoGlowColor, hoverGlowB)}) !important;transform:translateY(var(--of-logo-offset)) scale(1.04) !important;}\n`;
-    }
-    if (avatarLogoPulse){
-      css += `@keyframes ofLogoPulse{0%,100%{transform:translateY(var(--of-logo-offset)) scale(1);}50%{transform:translateY(calc(var(--of-logo-offset) - 3px)) scale(1.035);}}\n`;
-      css += `${selector} .profile-display-name::before{animation:ofLogoPulse 2.8s ease-in-out infinite !important;}\n`;
-    }
-    css += `\n`;
-  }
+  css += buildAvatarLogoCss(selector, {
+    enabled: avatarLogoEnabled,
+    width: avatarLogoWidth,
+    height: avatarLogoHeight,
+    offsetY: avatarLogoOffsetY,
+    opacity: avatarLogoOpacity,
+    image: avatarLogoImage,
+    glowColor: avatarLogoGlowColor,
+    glowStrength: avatarLogoGlowStrength,
+    glowBlur: avatarLogoGlowBlur,
+    hoverGlow: avatarLogoHoverGlow,
+    pulse: avatarLogoPulse,
+  });
 
   // Buttons/links (contact + boop)
   if (state.uniformLinks){
@@ -1886,27 +1907,19 @@ function buildSnippetCss(){
       css += `${avatarMediaSelector}{border-radius:${geo.radius} !important;}\n`;
     }
     css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n\n`;
-    if (avatarLogoEnabled){
-      const logoGlowA = clamp(0.12 + (0.24 * avatarLogoGlowStrength), 0, 1);
-      const logoGlowB = clamp(0.06 + (0.2 * avatarLogoGlowStrength), 0, 1);
-      const logoGlowPxA = Math.round(avatarLogoGlowBlur);
-      const logoGlowPxB = Math.round(avatarLogoGlowBlur * 2.1);
-      const baseFilter = avatarLogoGlowBlur > 0 || avatarLogoGlowStrength > 0
-        ? `drop-shadow(0 0 ${logoGlowPxA}px ${rgba(avatarLogoGlowColor, logoGlowA)}) drop-shadow(0 0 ${logoGlowPxB}px ${rgba(avatarLogoGlowColor, logoGlowB)})`
-        : "none";
-      css += `${selector} .profile-display-name{position:relative !important;}\n`;
-      css += `${selector} .profile-display-name::before{content:"";--of-logo-offset:${avatarLogoOffsetY}px;display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(var(--of-logo-offset)) scale(1) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;filter:${baseFilter} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;transition:transform 180ms ease, filter 180ms ease, opacity 180ms ease !important;}\n`;
-      if (avatarLogoHoverGlow){
-        const hoverGlowA = clamp(logoGlowA * 1.35, 0, 1);
-        const hoverGlowB = clamp(logoGlowB * 1.35, 0, 1);
-        css += `${selector} .profile-display-name:hover::before{filter:drop-shadow(0 0 ${Math.round(logoGlowPxA * 1.25)}px ${rgba(avatarLogoGlowColor, hoverGlowA)}) drop-shadow(0 0 ${Math.round(logoGlowPxB * 1.3)}px ${rgba(avatarLogoGlowColor, hoverGlowB)}) !important;transform:translateY(var(--of-logo-offset)) scale(1.04) !important;}\n`;
-      }
-      if (avatarLogoPulse){
-        css += `@keyframes ofLogoPulse{0%,100%{transform:translateY(var(--of-logo-offset)) scale(1);}50%{transform:translateY(calc(var(--of-logo-offset) - 3px)) scale(1.035);}}\n`;
-        css += `${selector} .profile-display-name::before{animation:ofLogoPulse 2.8s ease-in-out infinite !important;}\n`;
-      }
-      css += `\n`;
-    }
+    css += buildAvatarLogoCss(selector, {
+      enabled: avatarLogoEnabled,
+      width: avatarLogoWidth,
+      height: avatarLogoHeight,
+      offsetY: avatarLogoOffsetY,
+      opacity: avatarLogoOpacity,
+      image: avatarLogoImage,
+      glowColor: avatarLogoGlowColor,
+      glowStrength: avatarLogoGlowStrength,
+      glowBlur: avatarLogoGlowBlur,
+      hoverGlow: avatarLogoHoverGlow,
+      pulse: avatarLogoPulse,
+    });
   }
 
   if (state.snippetTextOnly){
