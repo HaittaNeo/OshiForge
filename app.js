@@ -145,6 +145,12 @@ const DEFAULTS = {
   avatarGlow: 1.0,
   nameColor: "#ffffff",
   nameGlow: 0.45,
+  avatarLogoEnabled: false,
+  avatarLogoUrl: "",
+  avatarLogoWidth: 180,
+  avatarLogoHeight: 90,
+  avatarLogoOffsetY: 6,
+  avatarLogoOpacity: 1,
 
   customShapeCss: "",
   customCursorCss: "",
@@ -292,6 +298,12 @@ const BINDINGS = [
   ["avatarGlow", "value", "avatarGlow"],
   ["nameColor", "value", "nameColor"],
   ["nameGlow", "value", "nameGlow"],
+  ["avatarLogoEnabled", "checked", "avatarLogoEnabled"],
+  ["avatarLogoUrl", "value", "avatarLogoUrl"],
+  ["avatarLogoWidth", "value", "avatarLogoWidth"],
+  ["avatarLogoHeight", "value", "avatarLogoHeight"],
+  ["avatarLogoOffsetY", "value", "avatarLogoOffsetY"],
+  ["avatarLogoOpacity", "value", "avatarLogoOpacity"],
 
   ["customShapeCss", "value", "customShapeCss"],
   ["customCursorCss", "value", "customCursorCss"],
@@ -719,6 +731,7 @@ const SIMPLE_CONTROL_IDS = new Set([
   "fontBody", "headerTextColor", "baseFontSize",
   "panelAlpha", "glassBlur",
   "avatarShape", "avatarSize", "avatarGlow", "nameColor", "nameGlow",
+  "avatarLogoEnabled", "avatarLogoWidth", "avatarLogoHeight", "avatarLogoOpacity",
   "btnBg", "btnText", "btnBorder", "btnHoverBg", "btnHoverText",
   "blurbTextColor", "interestTextColor", "aboutBodyColor", "taglineColor",
   "taglineBoxEnabled", "taglineBoxBgColor", "taglineBoxBorderColor", "taglineBoxGlow",
@@ -1300,6 +1313,12 @@ function buildCss(){
   const avatarGlow = clamp(state.avatarGlow, 0, 2);
   const nameColor = state.nameColor;
   const nameGlow = clamp(state.nameGlow, 0, 2);
+  const avatarLogoEnabled = Boolean(state.avatarLogoEnabled && String(state.avatarLogoUrl || "").trim());
+  const avatarLogoWidth = clamp(state.avatarLogoWidth, 40, 420);
+  const avatarLogoHeight = clamp(state.avatarLogoHeight, 20, 260);
+  const avatarLogoOffsetY = clamp(state.avatarLogoOffsetY, -80, 120);
+  const avatarLogoOpacity = clamp(state.avatarLogoOpacity, 0, 1);
+  const avatarLogoImage = cssUrl(state.avatarLogoUrl);
   const avatarMediaSelector = [
     `${selector} img.user-avatar.profile-avatar`,
     `${selector} .profile-main-card img.user-avatar`,
@@ -1487,6 +1506,10 @@ function buildCss(){
     css += `${avatarBoxSelector}{clip-path:${geo.clipPath} !important;-webkit-clip-path:${geo.clipPath} !important;overflow:hidden !important;}\n\n`;
   } else {
     css += `${avatarBoxSelector}{border-radius:${geo.radius} !important;clip-path:none !important;-webkit-clip-path:none !important;overflow:hidden !important;}\n\n`;
+  }
+  if (avatarLogoEnabled){
+    css += `${selector} .profile-main-card .card-body{position:relative !important;}\n`;
+    css += `${selector} .profile-main-card .card-body::after{content:"";position:absolute;left:50%;top:calc(${avatarSize}px + ${avatarLogoOffsetY}px);transform:translateX(-50%);width:${avatarLogoWidth}px;height:${avatarLogoHeight}px;background-image:${avatarLogoImage};background-size:contain;background-repeat:no-repeat;background-position:center;opacity:${avatarLogoOpacity};pointer-events:none;z-index:6 !important;}\n\n`;
   }
 
   // Buttons/links (contact + boop)
@@ -2158,10 +2181,24 @@ function renderAll(persist = true){
   setHint("avatarBorderLabel", `${state.avatarBorder}px`);
   setHint("avatarGlowLabel", `Glow: ${Number(state.avatarGlow).toFixed(2)}`);
   setHint("nameGlowLabel", `Glow: ${Number(state.nameGlow).toFixed(2)}`);
+  setHint("avatarLogoWidthLabel", `${Math.round(state.avatarLogoWidth)}px`);
+  setHint("avatarLogoHeightLabel", `${Math.round(state.avatarLogoHeight)}px`);
+  setHint("avatarLogoOffsetYLabel", `${Math.round(state.avatarLogoOffsetY)}px`);
+  setHint("avatarLogoOpacityLabel", `Opacity: ${Number(state.avatarLogoOpacity).toFixed(2)}`);
 
   const cssForOutput = buildSnippetCss();
   const cssForPreview = buildCss();
   $("cssOut").value = cssForOutput;
+  const snippetActive = [
+    state.snippetAvatarOnly,
+    state.snippetTextOnly,
+    state.snippetButtonsOnly,
+    state.snippetCommentsOnly,
+    state.snippetTaglineOnly,
+  ].some(Boolean);
+  setHint("snippetWarn", snippetActive
+    ? "Snippet mode is ON: copied CSS only includes selected sections."
+    : "");
   const blockedImports = getDisallowedImports(cssForOutput);
   setHint("importWarn", blockedImports.length
     ? `Import warning: MyOshi only allows font hosts in @import. Check: ${blockedImports.join(", ")}`
