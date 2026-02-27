@@ -1510,7 +1510,7 @@ function buildCss(){
   if (avatarLogoEnabled){
     css += `${selector} .profile-main-card .card-body{position:relative !important;}\n`;
     css += `${selector} .profile-main-card .card-body::after{content:"";display:block;position:absolute;left:50%;top:calc(${avatarSize}px + ${avatarLogoOffsetY}px);transform:translateX(-50%);width:${avatarLogoWidth}px;height:${avatarLogoHeight}px;background-image:${avatarLogoImage};background-size:contain;background-repeat:no-repeat;background-position:center;opacity:${avatarLogoOpacity};pointer-events:none;z-index:6 !important;}\n`;
-    css += `${selector} .of-avatar-logo{display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;object-fit:contain !important;opacity:${avatarLogoOpacity} !important;margin:${avatarLogoOffsetY}px auto 0 !important;pointer-events:none !important;position:relative !important;z-index:6 !important;}\n\n`;
+    css += `${selector} .of-profile-logo{display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;object-fit:contain !important;opacity:${avatarLogoOpacity} !important;margin:${avatarLogoOffsetY}px auto 0 !important;pointer-events:none !important;position:relative !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;}\n\n`;
   }
 
   // Buttons/links (contact + boop)
@@ -1888,7 +1888,7 @@ function renderPreview(css){
   const previewCss = css || buildCss();
   const avatarLogoEnabled = Boolean(state.avatarLogoEnabled && String(state.avatarLogoUrl || "").trim());
   const avatarLogoHtml = avatarLogoEnabled
-    ? `<img class="of-avatar-logo" src="${String(state.avatarLogoUrl || "").replace(/"/g, "&quot;")}" alt="profile logo" />`
+    ? `<img class="of-profile-logo" src="${String(state.avatarLogoUrl || "").replace(/"/g, "&quot;")}" alt="profile logo" />`
     : "";
   const previewLogoSuppressCss = avatarLogoEnabled
     ? `.profile-custom-css .profile-main-card .card-body::after, .profile-page.profile-custom-css .profile-main-card .card-body::after{content:none !important;display:none !important;width:0 !important;height:0 !important;opacity:0 !important;background-image:none !important;}`
