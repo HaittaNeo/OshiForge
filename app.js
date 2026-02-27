@@ -151,6 +151,11 @@ const DEFAULTS = {
   avatarLogoHeight: 90,
   avatarLogoOffsetY: 6,
   avatarLogoOpacity: 1,
+  avatarLogoGlowColor: "#ffffff",
+  avatarLogoGlowStrength: 0.45,
+  avatarLogoGlowBlur: 20,
+  avatarLogoHoverGlow: true,
+  avatarLogoPulse: false,
 
   customShapeCss: "",
   customCursorCss: "",
@@ -304,6 +309,11 @@ const BINDINGS = [
   ["avatarLogoHeight", "value", "avatarLogoHeight"],
   ["avatarLogoOffsetY", "value", "avatarLogoOffsetY"],
   ["avatarLogoOpacity", "value", "avatarLogoOpacity"],
+  ["avatarLogoGlowColor", "value", "avatarLogoGlowColor"],
+  ["avatarLogoGlowStrength", "value", "avatarLogoGlowStrength"],
+  ["avatarLogoGlowBlur", "value", "avatarLogoGlowBlur"],
+  ["avatarLogoHoverGlow", "checked", "avatarLogoHoverGlow"],
+  ["avatarLogoPulse", "checked", "avatarLogoPulse"],
 
   ["customShapeCss", "value", "customShapeCss"],
   ["customCursorCss", "value", "customCursorCss"],
@@ -731,7 +741,7 @@ const SIMPLE_CONTROL_IDS = new Set([
   "fontBody", "headerTextColor", "baseFontSize",
   "panelAlpha", "glassBlur",
   "avatarShape", "avatarSize", "avatarGlow", "nameColor", "nameGlow",
-  "avatarLogoEnabled", "avatarLogoWidth", "avatarLogoHeight", "avatarLogoOpacity",
+  "avatarLogoEnabled", "avatarLogoWidth", "avatarLogoHeight", "avatarLogoOpacity", "avatarLogoGlowColor", "avatarLogoGlowStrength", "avatarLogoGlowBlur", "avatarLogoHoverGlow", "avatarLogoPulse",
   "btnBg", "btnText", "btnBorder", "btnHoverBg", "btnHoverText",
   "blurbTextColor", "interestTextColor", "aboutBodyColor", "taglineColor",
   "taglineBoxEnabled", "taglineBoxBgColor", "taglineBoxBorderColor", "taglineBoxGlow",
@@ -1318,6 +1328,11 @@ function buildCss(){
   const avatarLogoHeight = clamp(state.avatarLogoHeight, 20, 260);
   const avatarLogoOffsetY = clamp(state.avatarLogoOffsetY, -80, 120);
   const avatarLogoOpacity = clamp(state.avatarLogoOpacity, 0, 1);
+  const avatarLogoGlowColor = state.avatarLogoGlowColor;
+  const avatarLogoGlowStrength = clamp(state.avatarLogoGlowStrength, 0, 2);
+  const avatarLogoGlowBlur = clamp(state.avatarLogoGlowBlur, 0, 80);
+  const avatarLogoHoverGlow = Boolean(state.avatarLogoHoverGlow);
+  const avatarLogoPulse = Boolean(state.avatarLogoPulse);
   const avatarLogoImage = cssUrl(state.avatarLogoUrl);
   const avatarMediaSelector = [
     `${selector} img.user-avatar.profile-avatar`,
@@ -1508,8 +1523,25 @@ function buildCss(){
     css += `${avatarBoxSelector}{border-radius:${geo.radius} !important;clip-path:none !important;-webkit-clip-path:none !important;overflow:hidden !important;}\n\n`;
   }
   if (avatarLogoEnabled){
+    const logoGlowA = clamp(0.12 + (0.24 * avatarLogoGlowStrength), 0, 1);
+    const logoGlowB = clamp(0.06 + (0.2 * avatarLogoGlowStrength), 0, 1);
+    const logoGlowPxA = Math.round(avatarLogoGlowBlur);
+    const logoGlowPxB = Math.round(avatarLogoGlowBlur * 2.1);
+    const baseFilter = avatarLogoGlowBlur > 0 || avatarLogoGlowStrength > 0
+      ? `drop-shadow(0 0 ${logoGlowPxA}px ${rgba(avatarLogoGlowColor, logoGlowA)}) drop-shadow(0 0 ${logoGlowPxB}px ${rgba(avatarLogoGlowColor, logoGlowB)})`
+      : "none";
     css += `${selector} .profile-display-name{position:relative !important;}\n`;
-    css += `${selector} .profile-display-name::before{content:"";display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(${avatarLogoOffsetY}px) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;}\n\n`;
+    css += `${selector} .profile-display-name::before{content:"";--of-logo-offset:${avatarLogoOffsetY}px;display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(var(--of-logo-offset)) scale(1) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;filter:${baseFilter} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;transition:transform 180ms ease, filter 180ms ease, opacity 180ms ease !important;}\n`;
+    if (avatarLogoHoverGlow){
+      const hoverGlowA = clamp(logoGlowA * 1.35, 0, 1);
+      const hoverGlowB = clamp(logoGlowB * 1.35, 0, 1);
+      css += `${selector} .profile-display-name:hover::before{filter:drop-shadow(0 0 ${Math.round(logoGlowPxA * 1.25)}px ${rgba(avatarLogoGlowColor, hoverGlowA)}) drop-shadow(0 0 ${Math.round(logoGlowPxB * 1.3)}px ${rgba(avatarLogoGlowColor, hoverGlowB)}) !important;transform:translateY(var(--of-logo-offset)) scale(1.04) !important;}\n`;
+    }
+    if (avatarLogoPulse){
+      css += `@keyframes ofLogoPulse{0%,100%{transform:translateY(var(--of-logo-offset)) scale(1);}50%{transform:translateY(calc(var(--of-logo-offset) - 3px)) scale(1.035);}}\n`;
+      css += `${selector} .profile-display-name::before{animation:ofLogoPulse 2.8s ease-in-out infinite !important;}\n`;
+    }
+    css += `\n`;
   }
 
   // Buttons/links (contact + boop)
@@ -1804,6 +1836,17 @@ function buildSnippetCss(){
   const avatarGlow = clamp(state.avatarGlow, 0, 2);
   const nameColor = state.nameColor;
   const nameGlow = clamp(state.nameGlow, 0, 2);
+  const avatarLogoEnabled = Boolean(state.avatarLogoEnabled && String(state.avatarLogoUrl || "").trim());
+  const avatarLogoWidth = clamp(state.avatarLogoWidth, 40, 420);
+  const avatarLogoHeight = clamp(state.avatarLogoHeight, 20, 260);
+  const avatarLogoOffsetY = clamp(state.avatarLogoOffsetY, -80, 120);
+  const avatarLogoOpacity = clamp(state.avatarLogoOpacity, 0, 1);
+  const avatarLogoGlowColor = state.avatarLogoGlowColor;
+  const avatarLogoGlowStrength = clamp(state.avatarLogoGlowStrength, 0, 2);
+  const avatarLogoGlowBlur = clamp(state.avatarLogoGlowBlur, 0, 80);
+  const avatarLogoHoverGlow = Boolean(state.avatarLogoHoverGlow);
+  const avatarLogoPulse = Boolean(state.avatarLogoPulse);
+  const avatarLogoImage = cssUrl(state.avatarLogoUrl);
   const taglineBoxEnabled = Boolean(state.taglineBoxEnabled);
   const taglineBoxBgColor = state.taglineBoxBgColor;
   const taglineBoxBorderColor = state.taglineBoxBorderColor;
@@ -1843,6 +1886,27 @@ function buildSnippetCss(){
       css += `${avatarMediaSelector}{border-radius:${geo.radius} !important;}\n`;
     }
     css += `${selector} .profile-display-name{color:${nameColor} !important;text-shadow:0 0 ${Math.round(8 + (24 * nameGlow))}px ${rgba(nameColor,0.25 + (0.3 * nameGlow))},0 0 ${Math.round(18 + (34 * nameGlow))}px ${rgba(primary,0.12 + (0.26 * nameGlow))} !important;}\n\n`;
+    if (avatarLogoEnabled){
+      const logoGlowA = clamp(0.12 + (0.24 * avatarLogoGlowStrength), 0, 1);
+      const logoGlowB = clamp(0.06 + (0.2 * avatarLogoGlowStrength), 0, 1);
+      const logoGlowPxA = Math.round(avatarLogoGlowBlur);
+      const logoGlowPxB = Math.round(avatarLogoGlowBlur * 2.1);
+      const baseFilter = avatarLogoGlowBlur > 0 || avatarLogoGlowStrength > 0
+        ? `drop-shadow(0 0 ${logoGlowPxA}px ${rgba(avatarLogoGlowColor, logoGlowA)}) drop-shadow(0 0 ${logoGlowPxB}px ${rgba(avatarLogoGlowColor, logoGlowB)})`
+        : "none";
+      css += `${selector} .profile-display-name{position:relative !important;}\n`;
+      css += `${selector} .profile-display-name::before{content:"";--of-logo-offset:${avatarLogoOffsetY}px;display:block !important;width:${avatarLogoWidth}px !important;height:${avatarLogoHeight}px !important;max-width:100% !important;margin:0 auto 8px auto !important;transform:translateY(var(--of-logo-offset)) scale(1) !important;background-image:${avatarLogoImage} !important;background-size:100% 100% !important;background-repeat:no-repeat !important;background-position:center !important;opacity:${avatarLogoOpacity} !important;filter:${baseFilter} !important;pointer-events:none !important;z-index:6 !important;clip-path:none !important;-webkit-clip-path:none !important;border-radius:0 !important;mask-image:none !important;-webkit-mask-image:none !important;overflow:visible !important;transition:transform 180ms ease, filter 180ms ease, opacity 180ms ease !important;}\n`;
+      if (avatarLogoHoverGlow){
+        const hoverGlowA = clamp(logoGlowA * 1.35, 0, 1);
+        const hoverGlowB = clamp(logoGlowB * 1.35, 0, 1);
+        css += `${selector} .profile-display-name:hover::before{filter:drop-shadow(0 0 ${Math.round(logoGlowPxA * 1.25)}px ${rgba(avatarLogoGlowColor, hoverGlowA)}) drop-shadow(0 0 ${Math.round(logoGlowPxB * 1.3)}px ${rgba(avatarLogoGlowColor, hoverGlowB)}) !important;transform:translateY(var(--of-logo-offset)) scale(1.04) !important;}\n`;
+      }
+      if (avatarLogoPulse){
+        css += `@keyframes ofLogoPulse{0%,100%{transform:translateY(var(--of-logo-offset)) scale(1);}50%{transform:translateY(calc(var(--of-logo-offset) - 3px)) scale(1.035);}}\n`;
+        css += `${selector} .profile-display-name::before{animation:ofLogoPulse 2.8s ease-in-out infinite !important;}\n`;
+      }
+      css += `\n`;
+    }
   }
 
   if (state.snippetTextOnly){
@@ -2184,6 +2248,8 @@ function renderAll(persist = true){
   setHint("avatarLogoHeightLabel", `${Math.round(state.avatarLogoHeight)}px`);
   setHint("avatarLogoOffsetYLabel", `${Math.round(state.avatarLogoOffsetY)}px`);
   setHint("avatarLogoOpacityLabel", `Opacity: ${Number(state.avatarLogoOpacity).toFixed(2)}`);
+  setHint("avatarLogoGlowStrengthLabel", `Glow: ${Number(state.avatarLogoGlowStrength).toFixed(2)}`);
+  setHint("avatarLogoGlowBlurLabel", `${Math.round(state.avatarLogoGlowBlur)}px`);
 
   const cssForOutput = buildSnippetCss();
   const cssForPreview = buildCss();

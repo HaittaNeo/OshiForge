@@ -569,6 +569,23 @@
             <div class="hint" id="avatarLogoOpacityLabel"></div>
           </div>
         </div>
+        <div class="row three">
+          <div><label>Logo glow color</label><input id="avatarLogoGlowColor" type="color" /></div>
+          <div>
+            <label>Glow strength</label>
+            <input id="avatarLogoGlowStrength" type="range" min="0" max="2" step="0.01" />
+            <div class="hint" id="avatarLogoGlowStrengthLabel"></div>
+          </div>
+          <div>
+            <label>Glow blur size</label>
+            <input id="avatarLogoGlowBlur" type="range" min="0" max="80" step="1" />
+            <div class="hint" id="avatarLogoGlowBlurLabel"></div>
+          </div>
+        </div>
+        <div class="row two">
+          <label><input id="avatarLogoHoverGlow" type="checkbox" /> Stronger glow on hover</label>
+          <label><input id="avatarLogoPulse" type="checkbox" /> Pulse animation</label>
+        </div>
         <div class="row">
           <label>Custom avatar shape CSS</label>
           <textarea id="customShapeCss" rows="6" placeholder="clip-path: polygon(...);"></textarea>
